@@ -221,8 +221,8 @@ Voir `docs/SCREENSHOTS.md` (5 captures 1280×800, ordre imposé).
 
 - **Langue par défaut** : English (US), traduction FR fournie.
 - **Site** : https://akselai.fr/outils/pixellens (aussi `homepage_url` du manifest).
-- **Politique de confidentialité** : héberger le contenu de
-  `docs/PRIVACY_POLICY.md` à une URL publique et la renseigner dans l'onglet
-  « Privacy » du dashboard.
+- **Politique de confidentialité** : `https://akselai.fr/outils/pixellens/confidentialite`
+  (page du site, synchrone avec `docs/PRIVACY_POLICY.md`) — à renseigner dans
+  l'onglet « Privacy » du dashboard.
 - **Data usage (onglet Privacy)** : cocher « This item does not collect user
   data » — aucune donnée collectée ni transmise (voir politique).

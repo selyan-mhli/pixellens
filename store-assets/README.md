@@ -42,7 +42,7 @@ remplacer par de vraies captures : suivre `docs/SCREENSHOTS.md`.
 | Single purpose | voir `docs/STORE_LISTING.md` § Single purpose statement |
 | Permission justifications | voir `docs/STORE_LISTING.md` § Justifications (une par permission — copier tel quel) |
 | Data usage | cocher « This item does not collect or use user data » (aucune collecte) |
-| Privacy policy URL | héberger `docs/PRIVACY_POLICY.md` (page publique) et coller l'URL |
+| Privacy policy URL | `https://akselai.fr/outils/pixellens/confidentialite` (page du site akselai.fr, synchrone avec `docs/PRIVACY_POLICY.md`) |
 
 ## Onglet « Payments »
 
@@ -54,8 +54,8 @@ purchases » — le paiement passe par ExtensionPay/Stripe, pas par Google.
 - [ ] `EXTPAY_EXTENSION_ID` réel dans `src/lib/constants.ts`, build + zip refaits
 - [ ] Achat de test réussi (mode test Stripe d'ExtensionPay) : payer → panneau
       débloqué sans rechargement ; « J'ai déjà payé » → restauration OK
-- [ ] Politique de confidentialité en ligne, URL renseignée
-- [ ] Page https://akselai.fr/outils/pixellens existante (ou retirer homepage_url)
+- [ ] Site akselai.fr déployé avec la page /outils/pixellens et sa politique de
+      confidentialité (faites — reste le déploiement de la branche suivie par Dokploy)
 - [ ] Les 4 commandes vertes : `npm run typecheck && npm run lint && npm test -- --run && npm run build`
 
 ## Regénérer / retoucher les captures
