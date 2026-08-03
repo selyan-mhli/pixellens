@@ -14,7 +14,16 @@ import gsap from 'gsap'
 import { usePanelStore, type PanelMode } from './store'
 import { MessageType } from '@/types/messages'
 import { getDesignSystems } from '@/lib/storage'
-import { readLicense, refreshLicenseIfStale, writeLicense } from '@/lib/license'
+import {
+  readLicense,
+  refreshLicenseIfStale,
+  writeLicense,
+  checkPaidStatus,
+  applyOutcome,
+} from '@/lib/license'
+import { LICENSE_STORAGE_KEY } from '@/lib/storage'
+import { extpay, realLicenseDeps } from '@/lib/extpay'
+import type { LicenseState } from '@/types/license'
 import { getHost } from '@/lib/url'
 import InspectorView from './views/InspectorView'
 import ScanView from './views/ScanView'
@@ -136,7 +145,7 @@ function App() {
       .then(async (stored) => {
         if (cancelled) return
         usePanelStore.getState().setLicense(stored)
-        const refreshed = await refreshLicenseIfStale(stored)
+        const refreshed = await refreshLicenseIfStale(stored, realLicenseDeps)
         if (cancelled || refreshed === stored) return
         await writeLicense(refreshed)
         if (!cancelled) usePanelStore.getState().setLicense(refreshed)
@@ -145,6 +154,57 @@ function App() {
     return () => {
       cancelled = true
     }
+  }, [])
+
+  // Déblocage instantané : quand le paiement (ou la restauration par email) aboutit
+  // sur extensionpay.com, onPaid est relayé jusqu'ici — le panneau passe Pro sans
+  // rechargement. Le service worker persiste aussi de son côté (panneau fermé).
+  // ExtPay n'expose pas de removeListener ; le contexte du panel est détruit à sa
+  // fermeture (MV3), donc un enregistrement par montage suffit.
+  useEffect(() => {
+    extpay.onPaid.addListener((user) => {
+      const next = {
+        tier: 'pro' as const,
+        email: user.email ?? null,
+        verifiedAt: new Date().toISOString(),
+        lastError: null,
+      }
+      writeLicense(next).catch((err) => console.error('[PixelLens]', err))
+      usePanelStore.getState().setLicense(next)
+    })
+  }, [])
+
+  // Filet de sécurité du déblocage : l'événement onPaid peut n'atteindre qu'UN des
+  // deux contextes (service worker vs panel) selon où ExtPay le déclenche. On écoute
+  // donc chrome.storage.onChanged : (1) notre clé licence, écrite par le service
+  // worker → miroir immédiat dans le store ; (2) le cache utilisateur d'ExtPay
+  // (`extensionpay_user`, storage.sync), mis à jour après un paiement → on
+  // re-vérifie et on ne s'applique QUE l'issue `paid` (jamais de dégradation ici).
+  useEffect(() => {
+    const onChanged = (
+      changes: { [key: string]: chrome.storage.StorageChange },
+      area: chrome.storage.AreaName,
+    ) => {
+      if (area === 'local' && changes[LICENSE_STORAGE_KEY]?.newValue) {
+        usePanelStore
+          .getState()
+          .setLicense(changes[LICENSE_STORAGE_KEY].newValue as LicenseState)
+        return
+      }
+      if (area === 'sync' && changes['extensionpay_user']) {
+        void (async () => {
+          const outcome = await checkPaidStatus(realLicenseDeps)
+          if (outcome.status !== 'paid') return
+          const state = usePanelStore.getState().license
+          const next = applyOutcome(state, outcome)
+          if (next === state) return
+          await writeLicense(next)
+          usePanelStore.getState().setLicense(next)
+        })()
+      }
+    }
+    chrome.storage.onChanged.addListener(onChanged)
+    return () => chrome.storage.onChanged.removeListener(onChanged)
   }, [])
 
   // Track the URL of the tab currently in front of the user so the views can

@@ -67,13 +67,14 @@ tokens (Style Dictionary–compatible) or a PNG palette. Rename and prune
 tokens before exporting. Keep your full scan history.
 
 ■ PRIVACY, FOR REAL
-No analytics, no telemetry, no account, no remote server. The only network
-request PixelLens ever makes itself is the optional Pro license check against
-gumroad.com. Site crawling happens from your own browser, on the site you
-chose, with your own session.
+No analytics, no telemetry, no account, no remote server. The only service
+PixelLens ever talks to is ExtensionPay (extensionpay.com) — and only when you
+buy, restore or verify the optional Pro upgrade. Site crawling happens from
+your own browser, on the site you chose, with your own session.
 
 Free forever for inspecting, scanning, contrast checking and single-page
-Markdown. Pro is a one-time 19 € purchase — lifetime license, no subscription.
+Markdown. Pro is a one-time 19 € in-app purchase (Stripe via ExtensionPay) —
+lifetime, no subscription, no license key to manage.
 ```
 
 ## Description longue — FR
@@ -117,14 +118,15 @@ Emportez le design system en variables CSS, config Tailwind, tokens JSON
 tokens avant export. Gardez tout votre historique de scans.
 
 ■ CONFIDENTIALITÉ, POUR DE VRAI
-Aucun analytics, aucune télémétrie, aucun compte, aucun serveur distant. La
-seule requête réseau émise par PixelLens elle-même est la vérification
-(optionnelle) de licence Pro auprès de gumroad.com. Le crawl s'effectue
-depuis votre propre navigateur, sur le site que vous avez choisi, avec votre
-propre session.
+Aucun analytics, aucune télémétrie, aucun compte, aucun serveur distant. Le
+seul service que PixelLens contacte est ExtensionPay (extensionpay.com) — et
+uniquement quand vous achetez, restaurez ou vérifiez l'option Pro. Le crawl
+s'effectue depuis votre propre navigateur, sur le site que vous avez choisi,
+avec votre propre session.
 
 Gratuit à vie pour l'inspection, le scan, le contraste et le Markdown d'une
-page. Pro : achat unique de 19 € — licence à vie, sans abonnement.
+page. Pro : achat intégré unique de 19 € (Stripe via ExtensionPay) — à vie,
+sans abonnement, sans clé de licence à gérer.
 ```
 
 ## Justifications des permissions
@@ -172,10 +174,13 @@ l'utilisateur active l'inspection ou sélectionne un élément.
 `chrome.storage.local` conserve : l'historique des design systems scannés
 (20 max, `pixellens_scans`), l'état durable de l'interface du panneau
 (`pixellens_panel_state` : vue active, format de couleur, dernier Markdown) et
-l'état de licence Pro (`pixellens:license` : clé saisie, date de dernière
-vérification). `chrome.storage.sync` ne conserve que les préférences
-d'affichage (`pixellens_preferences` : format de couleur, taille de grille,
-thème). Aucune de ces données ne quitte le navigateur.
+le statut Pro mis en cache (`pixellens:license` : tier, email du compte de
+paiement le cas échéant, date de dernière vérification — ce cache permet à un
+utilisateur Pro de le rester hors ligne). `chrome.storage.sync` conserve les
+préférences d'affichage (`pixellens_preferences`) et le cache technique de la
+bibliothèque ExtensionPay (`extensionpay_user`, `extensionpay_installed_at`).
+Aucune de ces données ne quitte le navigateur en dehors des échanges de
+paiement décrits ci-dessous.
 
 ### `clipboardWrite`
 
@@ -184,14 +189,18 @@ exportés, Markdown de page, document de crawl, bundle LLM) passent par
 `navigator.clipboard.writeText` (`src/lib/export.ts`). C'est le geste central
 du produit : copier pour coller dans un éditeur ou un assistant IA.
 
-### `host_permissions: ["https://api.gumroad.com/*"]`
+### Content script sur `https://extensionpay.com/*`
 
-Une seule requête sortante dans tout le code : `POST
-https://api.gumroad.com/v2/licenses/verify` (`src/lib/license.ts`), pour
-vérifier la clé de licence Pro que l'utilisateur a collée dans les Réglages.
-Elle ne transporte que la clé et l'identifiant produit, n'est émise qu'à
-l'activation puis au plus une fois tous les 30 jours, et son échec ne retire
-jamais de fonctionnalités (fail-open). Aucun analytics, aucun autre endpoint.
+Second content script du manifest (`src/content/extpay-relay.ts`), limité au
+seul domaine extensionpay.com : c'est le relais officiel de la bibliothèque
+ExtensionPay qui permet à la page de paiement/restauration d'informer
+l'extension qu'un paiement a abouti (déblocage Pro instantané). Il ne tourne
+sur aucun autre site et ne lit rien d'autre. Les échanges réseau avec
+`extensionpay.com` (statut de paiement) ne se produisent que lorsque
+l'utilisateur achète, restaure ou vérifie l'option Pro — puis au plus une fois
+tous les 30 jours pour un utilisateur Pro ; leur échec ne retire jamais de
+fonctionnalités (fail-open). Aucune host permission supplémentaire n'est
+requise. Aucun analytics, aucun autre endpoint.
 
 ### Content scripts sur `<all_urls>`
 

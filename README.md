@@ -51,7 +51,8 @@ Extension Chrome pour développeurs et designers : conversion de n'importe quell
 
 ## 💎 Gratuit vs Pro
 
-Licence Pro : **19 € une fois, à vie** (via Gumroad, clé à coller dans les Réglages).
+Pro : **19 € une fois, à vie** — achat intégré via ExtensionPay (paiement Stripe),
+aucune clé à saisir : on clique « Passer en Pro », on paye, c'est débloqué.
 Règle produit : *ce qui regarde est gratuit, ce qui emporte est Pro.*
 
 | Fonctionnalité | Gratuit | Pro |
@@ -69,8 +70,9 @@ Règle produit : *ce qui regarde est gratuit, ce qui emporte est Pro.*
 | Crawl de site au-delà de 3 pages (jusqu'à 100) | ❌ | ✅ |
 | Historique des scans au-delà des 3 derniers | ❌ | ✅ |
 
-La vérification de licence (`api.gumroad.com`) est la **seule** requête réseau
-émise par l'extension elle-même — fail-open : un Pro hors ligne reste Pro.
+Les échanges avec `extensionpay.com` (achat / restauration / vérification du
+statut Pro) sont les **seules** requêtes réseau émises par l'extension
+elle-même — fail-open : un Pro hors ligne reste Pro.
 Politique de confidentialité : [`docs/PRIVACY_POLICY.md`](docs/PRIVACY_POLICY.md).
 
 ## 🏗️ Tech Stack
