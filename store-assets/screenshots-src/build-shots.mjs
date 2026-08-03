@@ -332,7 +332,7 @@ const panelInspect = panel({
 /* ============ écrire les 5 fichiers ============ */
 const shots = [
   ['01-copy-for-llm', shot({ url: 'lumenjournal.com/essays/eight-point-grid', page: articlePage, panelHtml: panelMarkdown, caption: 'One click: the whole page as clean Markdown, ready for your AI.' })],
-  ['02-crawl', shot({ url: 'polarisdocs.dev/components/buttons', page: docsPage, panelHtml: panelCrawl, caption: 'Crawl a whole site into one Markdown document — sitemap-first.' })],
+  ['02-crawl', shot({ url: 'polarisdocs.dev/components/buttons', page: docsPage, panelHtml: panelCrawl, caption: 'Crawl a whole site into one Markdown document, sitemap-first.' })],
   ['03-design-system', shot({ url: 'nordwind.travel', page: brandPage, panelHtml: panelDS, caption: 'Scan any page. Get its palette, type scale, spacing and shadows.' })],
   ['04-export-tailwind', shot({ url: 'nordwind.travel', page: brandPage, panelHtml: panelExport, caption: 'Export your tokens: CSS variables, Tailwind config, JSON, PNG.' })],
   ['05-inspect', shot({ url: 'runlog.app', page: inspectPage, panelHtml: panelInspect, caption: 'Hover any element: box model, computed CSS, one-click copy.' })],

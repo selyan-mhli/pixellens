@@ -1,6 +1,6 @@
-# Politique de confidentialité — PixelLens
+# Politique de confidentialité de PixelLens
 
-*Dernière mise à jour : 3 août 2026 — s'applique à PixelLens v1.1.0 et ultérieures.*
+*Dernière mise à jour : 3 août 2026. S'applique à PixelLens v1.1.0 et ultérieures.*
 
 PixelLens est une extension Chrome qui convertit des pages web en Markdown et
 extrait le design system des pages que vous consultez. Elle a été conçue pour
@@ -28,22 +28,22 @@ dans votre profil de navigateur :
 | Préférences d'affichage | `chrome.storage.sync` | Format de couleur (HEX/RGB/HSL), taille de grille, thème |
 | Historique de scans | `chrome.storage.local` | Les 20 derniers design systems extraits (couleurs, typo, spacings, URL et titre de la page scannée) |
 | État de l'interface | `chrome.storage.local` | Vue active du panneau, dernière conversion Markdown |
-| Statut Pro (cache) | `chrome.storage.local` | Votre statut gratuit/Pro, l'email du compte de paiement le cas échéant, la date de dernière vérification — ce cache permet de rester Pro hors ligne |
+| Statut Pro (cache) | `chrome.storage.local` | Votre statut gratuit/Pro, l'email du compte de paiement le cas échéant, la date de dernière vérification (ce cache permet de rester Pro hors ligne) |
 | Cache ExtensionPay | `chrome.storage.sync` | Données techniques de la bibliothèque de paiement (statut utilisateur, date d'installation) |
 
 **Tout effacer** : supprimez l'extension (clic droit sur l'icône → « Retirer de
-Chrome ») — Chrome efface alors l'intégralité de ce stockage. Vous pouvez aussi
+Chrome ») : Chrome efface alors l'intégralité de ce stockage. Vous pouvez aussi
 vider l'historique depuis le panneau (Historique → « Clear History »).
 
 ## Les seuls échanges réseau : le paiement Pro (ExtensionPay)
 
-PixelLens n'émet aucune requête vers ses propres serveurs — elle n'en a pas.
+PixelLens n'émet aucune requête vers ses propres serveurs, car elle n'en a pas.
 Les seuls échanges réseau de l'extension elle-même concernent l'option Pro,
 via le service ExtensionPay (`extensionpay.com`) :
 
 - **quand ils ont lieu** : uniquement lorsque vous cliquez « Passer en Pro »
   (ouverture de la page de paiement), « J'ai déjà payé » (restauration par
-  email), « Vérifier mon paiement » — puis, pour un utilisateur Pro, au plus
+  email), « Vérifier mon paiement », puis, pour un utilisateur Pro, au plus
   **une fois tous les 30 jours** pour confirmer le statut. Si vous n'utilisez
   jamais l'option Pro, **aucune requête n'est émise** ;
 - **ce qui transite** : l'identifiant du produit PixelLens et un identifiant
@@ -52,7 +52,7 @@ via le service ExtensionPay (`extensionpay.com`) :
   de restauration. Jamais votre navigation, jamais le contenu des pages ;
 - **hors ligne** : si le serveur est injoignable, PixelLens **conserve votre
   statut Pro** et n'envoie rien d'autre ;
-- le paiement par carte est traité par **Stripe** sur la page d'ExtensionPay —
+- le paiement par carte est traité par **Stripe** sur la page d'ExtensionPay :
   votre numéro de carte ne passe jamais par l'extension.
 
 Politiques des prestataires : https://extensionpay.com/privacy ·
@@ -62,7 +62,7 @@ https://stripe.com/privacy
 
 La fonction « Crawl site » télécharge des pages du site **que vous avez
 vous-même choisi** (celui de l'onglet actif), **depuis votre navigateur**, avec
-votre session — exactement comme si vous ouvriez ces pages vous-même. Aucun
+votre session, exactement comme si vous ouvriez ces pages vous-même. Aucun
 intermédiaire : les requêtes vont directement de votre navigateur au site
 concerné. Le résultat (le document Markdown) reste dans votre navigateur tant
 que vous ne le copiez ou ne le téléchargez pas. Le crawl respecte le fichier

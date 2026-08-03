@@ -32,19 +32,19 @@ of the page being viewed. All processing happens locally in the browser.
 ```
 Feed your AI real pages, not screenshots.
 
-PixelLens turns any web page — or an entire site — into clean, structured
+PixelLens turns any web page (or an entire site) into clean, structured
 Markdown your AI assistant can actually use, and extracts the page's full
 design system while it's at it. Everything runs locally in your browser: no
 server, no account, no API key, and your data never leaves your machine.
 
 ■ PAGE → MARKDOWN (free)
 Convert the current page into clean GFM Markdown with YAML frontmatter
-(title, URL, capture date, word count) — copy it or download the .md file.
+(title, URL, capture date, word count): copy it or download the .md file.
 Headings, links, images, tables and code blocks are preserved.
 
 ■ CRAWL A WHOLE SITE (free: 3 pages · Pro: up to 100)
-One click crawls every same-site page — sitemap-first, falling back to link
-crawling — and concatenates them into a single Markdown document with a table
+One click crawls every same-site page (sitemap-first, falling back to link
+crawling) and concatenates them into a single Markdown document with a table
 of contents, ready to paste into an AI's context window. Two render modes:
 Fast (server HTML) or Full (each page rendered in a real background tab, so
 JavaScript-heavy SPAs convert too). Download as one .md or a multi-file ZIP.
@@ -63,17 +63,17 @@ overlay and distance measurement included.
 
 ■ EXPORT YOUR TOKENS (Pro)
 Ship the extracted design system as CSS variables, a Tailwind config, JSON
-tokens (Style Dictionary–compatible) or a PNG palette. Rename and prune
+tokens (Style Dictionary compatible) or a PNG palette. Rename and prune
 tokens before exporting. Keep your full scan history.
 
 ■ PRIVACY, FOR REAL
 No analytics, no telemetry, no account, no remote server. The only service
-PixelLens ever talks to is ExtensionPay (extensionpay.com) — and only when you
+PixelLens ever talks to is ExtensionPay (extensionpay.com), and only when you
 buy, restore or verify the optional Pro upgrade. Site crawling happens from
 your own browser, on the site you chose, with your own session.
 
 Free forever for inspecting, scanning, contrast checking and single-page
-Markdown. Pro is a one-time 19 € in-app purchase (Stripe via ExtensionPay) —
+Markdown. Pro is a one-time 19 € in-app purchase (Stripe via ExtensionPay):
 lifetime, no subscription, no license key to manage.
 ```
 
@@ -82,7 +82,7 @@ lifetime, no subscription, no license key to manage.
 ```
 Donnez à votre IA de vraies pages, pas des captures d'écran.
 
-PixelLens transforme n'importe quelle page web — ou un site entier — en
+PixelLens transforme n'importe quelle page web (ou un site entier) en
 Markdown propre et structuré, directement exploitable par votre assistant IA,
 et en profite pour extraire le design system complet de la page. Tout tourne
 localement dans votre navigateur : pas de serveur, pas de compte, pas de clé
@@ -90,12 +90,12 @@ API, et vos données ne quittent jamais votre machine.
 
 ■ PAGE → MARKDOWN (gratuit)
 Convertissez la page courante en Markdown GFM propre avec frontmatter YAML
-(titre, URL, date de capture, nombre de mots) — copiez-le ou téléchargez le
+(titre, URL, date de capture, nombre de mots) : copiez-le ou téléchargez le
 fichier .md. Titres, liens, images, tableaux et blocs de code sont préservés.
 
 ■ CRAWLEZ UN SITE ENTIER (gratuit : 3 pages · Pro : jusqu'à 100)
-Un clic parcourt toutes les pages du site — sitemap d'abord, puis suivi de
-liens — et les concatène en un seul document Markdown avec table des
+Un clic parcourt toutes les pages du site (sitemap d'abord, puis suivi de
+liens) et les concatène en un seul document Markdown avec table des
 matières, prêt à coller dans le contexte d'une IA. Deux modes de rendu :
 Fast (HTML serveur) ou Full (chaque page rendue dans un vrai onglet en
 arrière-plan, pour convertir aussi les SPA). Téléchargement en un .md unique
@@ -119,13 +119,13 @@ tokens avant export. Gardez tout votre historique de scans.
 
 ■ CONFIDENTIALITÉ, POUR DE VRAI
 Aucun analytics, aucune télémétrie, aucun compte, aucun serveur distant. Le
-seul service que PixelLens contacte est ExtensionPay (extensionpay.com) — et
+seul service que PixelLens contacte est ExtensionPay (extensionpay.com), et
 uniquement quand vous achetez, restaurez ou vérifiez l'option Pro. Le crawl
 s'effectue depuis votre propre navigateur, sur le site que vous avez choisi,
 avec votre propre session.
 
 Gratuit à vie pour l'inspection, le scan, le contraste et le Markdown d'une
-page. Pro : achat intégré unique de 19 € (Stripe via ExtensionPay) — à vie,
+page. Pro : achat intégré unique de 19 € (Stripe via ExtensionPay), à vie,
 sans abonnement, sans clé de licence à gérer.
 ```
 

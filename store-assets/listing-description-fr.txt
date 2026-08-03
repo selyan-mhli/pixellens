@@ -1,12 +1,12 @@
 Donnez à votre IA de vraies pages, pas des captures d'écran.
 
-PixelLens transforme n'importe quelle page web — ou un site entier — en Markdown propre et structuré, directement exploitable par votre assistant IA, et en profite pour extraire le design system complet de la page. Tout tourne localement dans votre navigateur : pas de serveur, pas de compte, pas de clé API, et vos données ne quittent jamais votre machine.
+PixelLens transforme n'importe quelle page web (ou un site entier) en Markdown propre et structuré, directement exploitable par votre assistant IA, et en profite pour extraire le design system complet de la page. Tout tourne localement dans votre navigateur : pas de serveur, pas de compte, pas de clé API, et vos données ne quittent jamais votre machine.
 
 ■ PAGE → MARKDOWN (gratuit)
-Convertissez la page courante en Markdown GFM propre avec frontmatter YAML (titre, URL, date de capture, nombre de mots) — copiez-le ou téléchargez le fichier .md. Titres, liens, images, tableaux et blocs de code sont préservés.
+Convertissez la page courante en Markdown GFM propre avec frontmatter YAML (titre, URL, date de capture, nombre de mots) : copiez-le ou téléchargez le fichier .md. Titres, liens, images, tableaux et blocs de code sont préservés.
 
 ■ CRAWLEZ UN SITE ENTIER (gratuit : 3 pages · Pro : jusqu'à 100)
-Un clic parcourt toutes les pages du site — sitemap d'abord, puis suivi de liens — et les concatène en un seul document Markdown avec table des matières, prêt à coller dans le contexte d'une IA. Deux modes de rendu : Fast (HTML serveur) ou Full (chaque page rendue dans un vrai onglet en arrière-plan, pour convertir aussi les SPA). Téléchargement en un .md unique ou en ZIP multi-fichiers. Respecte robots.txt par défaut.
+Un clic parcourt toutes les pages du site (sitemap d'abord, puis suivi de liens) et les concatène en un seul document Markdown avec table des matières, prêt à coller dans le contexte d'une IA. Deux modes de rendu : Fast (HTML serveur) ou Full (chaque page rendue dans un vrai onglet en arrière-plan, pour convertir aussi les SPA). Téléchargement en un .md unique ou en ZIP multi-fichiers. Respecte robots.txt par défaut.
 
 ■ COPY FOR LLM (Pro)
 Un bouton copie un bundle unique et auto-descriptif : la page en Markdown + le design system extrait + les métadonnées. Collez-le dans Claude, ChatGPT ou n'importe quel assistant : il comprend la page de bout en bout.
@@ -18,6 +18,6 @@ Scannez une page et obtenez sa palette (clusterisée et auto-classée), son éch
 Emportez le design system en variables CSS, config Tailwind, tokens JSON (compatibles Style Dictionary) ou palette PNG. Renommez et nettoyez les tokens avant export. Gardez tout votre historique de scans.
 
 ■ CONFIDENTIALITÉ, POUR DE VRAI
-Aucun analytics, aucune télémétrie, aucun compte, aucun serveur distant. Le seul service que PixelLens contacte est ExtensionPay (extensionpay.com) — et uniquement quand vous achetez, restaurez ou vérifiez l'option Pro. Le crawl s'effectue depuis votre propre navigateur, sur le site que vous avez choisi, avec votre propre session.
+Aucun analytics, aucune télémétrie, aucun compte, aucun serveur distant. Le seul service que PixelLens contacte est ExtensionPay (extensionpay.com), et uniquement quand vous achetez, restaurez ou vérifiez l'option Pro. Le crawl s'effectue depuis votre propre navigateur, sur le site que vous avez choisi, avec votre propre session.
 
-Gratuit à vie pour l'inspection, le scan, le contraste et le Markdown d'une page. Pro : achat intégré unique de 19 € (Stripe via ExtensionPay) — à vie, sans abonnement, sans clé de licence à gérer.
+Gratuit à vie pour l'inspection, le scan, le contraste et le Markdown d'une page. Pro : achat intégré unique de 19 € (Stripe via ExtensionPay), à vie, sans abonnement, sans clé de licence à gérer.
