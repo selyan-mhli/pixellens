@@ -98,7 +98,7 @@ Politique de confidentialité : [`docs/PRIVACY_POLICY.md`](docs/PRIVACY_POLICY.m
 ### Développement
 ```bash
 # Cloner le repo
-git clone https://github.com/vgtray/pixellens.git
+git clone https://github.com/selyan-mhli/pixellens.git
 cd pixellens
 
 # Installer les dépendances
