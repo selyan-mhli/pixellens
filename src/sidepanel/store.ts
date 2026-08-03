@@ -5,6 +5,8 @@ import type { InspectedElement } from '@/types/inspection'
 import type { DesignSystem } from '@/types/design-system'
 import type { MarkdownResult } from '@/types/markdown'
 import type { CrawlProgress, CrawlResult } from '@/types/crawl'
+import type { LicenseState } from '@/types/license'
+import { DEFAULT_LICENSE } from '@/lib/license'
 
 export type PanelMode =
   | 'inspect'
@@ -54,6 +56,16 @@ interface PanelState {
   // default state first and then snaps to the restored one (see App.tsx).
   // Never persisted (excluded from `partialize`) — purely runtime state.
   hasHydrated: boolean
+  // État de licence (free/pro). La SOURCE DE VÉRITÉ est chrome.storage.local
+  // (clé `pixellens:license`, gérée par lib/license) — jamais le persist Zustand :
+  // App.tsx hydrate ce miroir au montage puis re-vérifie en arrière-plan. Exclu de
+  // `partialize` pour ne jamais avoir deux copies stockées qui divergent.
+  license: LicenseState
+  // Dérivé de license.tier, maintenu par setLicense — le seul flag que les vues lisent.
+  isPro: boolean
+  // Demande one-shot de focus du champ « Clé de licence » des Réglages (posée par le
+  // lien « J'ai déjà une clé » d'un ProGate). Transient, jamais persisté.
+  settingsFocusLicense: boolean
   // URL of the tab currently in front of the user, tracked live from
   // chrome.tabs (see App.tsx). Views compare it against the host their scan /
   // markdown came from, so a restored result from another site is flagged as
@@ -81,6 +93,8 @@ interface PanelState {
   setCrawlRespectRobots: (respect: boolean) => void
   setHasHydrated: (hydrated: boolean) => void
   setActiveTabUrl: (url: string | null) => void
+  setLicense: (next: LicenseState) => void
+  setSettingsFocusLicense: (focus: boolean) => void
 }
 
 export const usePanelStore = create<PanelState>()(
@@ -104,6 +118,9 @@ export const usePanelStore = create<PanelState>()(
       crawlRespectRobots: true,
       hasHydrated: false,
       activeTabUrl: null,
+      license: { ...DEFAULT_LICENSE },
+      isPro: false,
+      settingsFocusLicense: false,
 
       setMode: (mode) => set({ activeMode: mode }),
       setInspectedElement: (el) => set({ inspectedElement: el }),
@@ -126,6 +143,8 @@ export const usePanelStore = create<PanelState>()(
       setCrawlRespectRobots: (respect) => set({ crawlRespectRobots: respect }),
       setHasHydrated: (hydrated) => set({ hasHydrated: hydrated }),
       setActiveTabUrl: (url) => set({ activeTabUrl: url }),
+      setLicense: (next) => set({ license: next, isPro: next.tier === 'pro' }),
+      setSettingsFocusLicense: (focus) => set({ settingsFocusLicense: focus }),
     }),
     {
       name: PANEL_STATE_STORAGE_KEY,

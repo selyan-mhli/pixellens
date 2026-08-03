@@ -14,6 +14,7 @@ import gsap from 'gsap'
 import { usePanelStore, type PanelMode } from './store'
 import { MessageType } from '@/types/messages'
 import { getDesignSystems } from '@/lib/storage'
+import { readLicense, refreshLicenseIfStale, writeLicense } from '@/lib/license'
 import { getHost } from '@/lib/url'
 import InspectorView from './views/InspectorView'
 import ScanView from './views/ScanView'
@@ -124,6 +125,27 @@ function App() {
       cancelled = true
     }
   }, [hasHydrated])
+
+  // Hydrate l'état de licence SANS bloquer le rendu : l'interface s'affiche avec
+  // l'état stocké dès qu'il est lu, puis refreshLicenseIfStale re-vérifie en
+  // arrière-plan (au plus une fois tous les 30 jours). FAIL-OPEN : hors ligne,
+  // l'état renvoyé est inchangé (un Pro reste Pro) et rien n'est réécrit.
+  useEffect(() => {
+    let cancelled = false
+    readLicense()
+      .then(async (stored) => {
+        if (cancelled) return
+        usePanelStore.getState().setLicense(stored)
+        const refreshed = await refreshLicenseIfStale(stored)
+        if (cancelled || refreshed === stored) return
+        await writeLicense(refreshed)
+        if (!cancelled) usePanelStore.getState().setLicense(refreshed)
+      })
+      .catch((err) => console.error('[PixelLens]', err))
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   // Track the URL of the tab currently in front of the user so the views can
   // tell whether a restored scan/markdown belongs to the page on screen (see
