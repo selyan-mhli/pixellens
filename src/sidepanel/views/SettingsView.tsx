@@ -171,8 +171,12 @@ function LicenseSection() {
               </button>
             </div>
           </label>
-          {error && (
-            <p className="text-[11px] text-panel-text-dim leading-relaxed mt-2">{error}</p>
+          {/* Erreur locale d'activation, sinon la dernière erreur persistée (ex. une
+              licence dégradée par la re-vérification des 30 jours). */}
+          {(error || license.lastError) && (
+            <p className="text-[11px] text-panel-text-dim leading-relaxed mt-2">
+              {error ?? license.lastError}
+            </p>
           )}
         </div>
       )}
