@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Palette, TextT, ArrowsOutSimple, Circle, Drop, Trash } from '@phosphor-icons/react'
+import { Palette, TextT, ArrowsOutSimple, Circle, Drop, Trash, Export } from '@phosphor-icons/react'
 import { usePanelStore } from '../store'
 import ExportButton from '../components/ExportButton'
+import { ProGateCard } from '../components/ProGate'
 import ColorSwatch from '../components/ColorSwatch'
 import ShadowPreview from '../components/ShadowPreview'
 import StaleScanBanner from '../components/StaleScanBanner'
@@ -13,6 +14,12 @@ function DesignSystemView() {
   const setDesignSystem = usePanelStore((s) => s.setDesignSystem)
   const setMode = usePanelStore((s) => s.setMode)
   const activeTabUrl = usePanelStore((s) => s.activeTabUrl)
+  const isPro = usePanelStore((s) => s.isPro)
+  // Gratuit : la consultation est complète, mais l'édition (renommer/supprimer) et
+  // l'export « emportent » → Pro. Une seule carte compacte le dit dans la Palette,
+  // sans jamais voiler les tokens eux-mêmes (le pattern blur ne convient pas à des
+  // actions inline).
+  const [showEditGate, setShowEditGate] = useState(false)
 
   if (!designSystem) {
     return (
@@ -69,13 +76,35 @@ function DesignSystemView() {
             {designSystem.metadata.url}
           </p>
         </div>
-        <ExportButton designSystem={designSystem} />
+        {isPro ? (
+          <ExportButton designSystem={designSystem} />
+        ) : (
+          // Gratuit : l'export « emporte » → on route vers la vue Export, où le
+          // résultat réel s'affiche (flouté) avec l'appel à l'action Pro.
+          <button
+            onClick={() => setMode('export')}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium bg-panel-accent text-white hover:bg-panel-accent-hover transition-all duration-200 focus-visible:ring-2 focus-visible:ring-panel-accent focus-visible:ring-offset-1 focus-visible:ring-offset-panel-bg"
+          >
+            <Export size={12} />
+            Export
+          </button>
+        )}
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-5">
         {/* Colors */}
         <DSSection title="Palette" icon={<Palette size={14} />} count={designSystem.colors.length}>
+          {/* Gratuit : la carte Pro n'apparaît QUE si l'utilisateur tente d'éditer —
+              jamais de porte fermée affichée d'office devant un contenu gratuit. */}
+          {!isPro && showEditGate && (
+            <div className="flex justify-center mb-3">
+              <ProGateCard
+                title="Éditez vos tokens"
+                body="Renommez et supprimez les couleurs pour un design system propre à exporter."
+              />
+            </div>
+          )}
           <div className="flex flex-col gap-2">
             {designSystem.colors.map((color, i) => (
               <div key={i} className="flex items-center gap-2 group">
@@ -83,12 +112,13 @@ function DesignSystemView() {
                 <EditableLabel
                   value={color.name}
                   onChange={(v) => handleRenameColor(i, v)}
+                  onLockedAttempt={isPro ? undefined : () => setShowEditGate(true)}
                 />
                 <span className="text-[10px] font-mono text-panel-text-dim ml-auto">
                   {color.hex}
                 </span>
                 <button
-                  onClick={() => handleRemoveColor(i)}
+                  onClick={() => (isPro ? handleRemoveColor(i) : setShowEditGate(true))}
                   aria-label={`Remove ${color.name || color.hex}`}
                   className="opacity-0 group-hover:opacity-100 p-0.5 text-panel-text-dim hover:text-red-400 transition-all duration-150"
                   title="Remove"
@@ -194,9 +224,12 @@ function DSSection({
 function EditableLabel({
   value,
   onChange,
+  onLockedAttempt,
 }: {
   value: string
   onChange: (v: string) => void
+  /** Fourni en mode gratuit : la tentative d'édition déclenche la carte Pro. */
+  onLockedAttempt?: () => void
 }) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(value)
@@ -225,7 +258,14 @@ function EditableLabel({
 
   return (
     <button
-      onClick={() => { setDraft(value); setEditing(true) }}
+      onClick={() => {
+        if (onLockedAttempt) {
+          onLockedAttempt()
+          return
+        }
+        setDraft(value)
+        setEditing(true)
+      }}
       className="text-[11px] font-medium text-panel-text hover:text-panel-accent transition-colors duration-150 truncate max-w-[100px] text-left"
       title="Click to rename"
     >
