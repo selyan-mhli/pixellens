@@ -1,10 +1,26 @@
 # 🔍 PixelLens
 
-> *Inspect any website. Copy any design system.*
+> *Turn any web page into clean Markdown for your AI — and extract its design system.*
 
-Extension Chrome pour designers et développeurs qui inspecte n'importe quel site web en un clic : extraction des couleurs, typographies, spacings, et génération automatique d'un mini design system exportable.
+Extension Chrome pour développeurs et designers : conversion de n'importe quelle page (ou d'un site entier) en Markdown propre pour une IA, bundle « Copy for LLM », et extraction complète du design system — couleurs, typographies, spacings, ombres, radius — le tout **100 % local** (aucun serveur, aucune clé API).
 
 ## ✨ Features
+
+### 📝 Page → Markdown
+- Conversion de la page courante en Markdown GFM propre (turndown + plugin GFM)
+- Frontmatter YAML : titre, URL, date de capture, nombre de mots
+- Stats : headings, liens, images, tableaux, blocs de code
+- Copie ou téléchargement `.md`
+
+### 🌐 Crawl de site → un seul document
+- Crawl de toutes les pages same-site : sitemap d'abord, sinon BFS de liens (max 100 pages, profondeur 3)
+- Deux modes de rendu : **Fast** (HTML serveur) ou **Full** (chaque page rendue dans un vrai onglet d'arrière-plan — les SPA passent aussi)
+- Respect de robots.txt (désactivable), raisons de skip détaillées (403, timeout, robots…)
+- Export : un `.md` concaténé avec table des matières, ou ZIP multi-fichiers
+
+### 🤖 Copy for LLM
+- Un bouton copie un bundle unique : contenu de la page en Markdown + design system extrait + métadonnées
+- Auto-descriptif, prêt à coller dans le contexte de Claude / ChatGPT
 
 ### 🎯 Mode Inspection
 - Hover highlight avec box model visuel (padding vert, margin orange, content bleu)
@@ -27,9 +43,35 @@ Extension Chrome pour designers et développeurs qui inspecte n'importe quel sit
   - **PNG Palette** — Image partageable
 
 ### 🛠️ Outils
+- ♿ Vérificateur de contraste WCAG
 - 📏 Mesure de distances entre éléments
 - 📐 Grid overlay configurable (4/8/12/16px)
 - 🎯 Floating toolbar draggable
+- ⌘K Command palette
+
+## 💎 Gratuit vs Pro
+
+Licence Pro : **19 € une fois, à vie** (via Gumroad, clé à coller dans les Réglages).
+Règle produit : *ce qui regarde est gratuit, ce qui emporte est Pro.*
+
+| Fonctionnalité | Gratuit | Pro |
+|---|:--:|:--:|
+| Mode inspection (hover, box model, CSS calculé) | ✅ | ✅ |
+| Copie d'une valeur CSS individuelle | ✅ | ✅ |
+| Scan de page (couleurs, typo, spacings, ombres, radius) | ✅ | ✅ |
+| Consultation du design system généré | ✅ | ✅ |
+| Vérificateur de contraste WCAG | ✅ | ✅ |
+| Grid overlay + mesure de distances | ✅ | ✅ |
+| Page courante → Markdown (copie et téléchargement) | ✅ | ✅ |
+| Édition des tokens (renommer, supprimer) | ❌ | ✅ |
+| Exports : CSS Variables, Tailwind, JSON, palette PNG | ❌ | ✅ |
+| « Copy for LLM » (contenu + design system + métadonnées) | ❌ | ✅ |
+| Crawl de site au-delà de 3 pages (jusqu'à 100) | ❌ | ✅ |
+| Historique des scans au-delà des 3 derniers | ❌ | ✅ |
+
+La vérification de licence (`api.gumroad.com`) est la **seule** requête réseau
+émise par l'extension elle-même — fail-open : un Pro hors ligne reste Pro.
+Politique de confidentialité : [`docs/PRIVACY_POLICY.md`](docs/PRIVACY_POLICY.md).
 
 ## 🏗️ Tech Stack
 
@@ -84,8 +126,8 @@ npm run dev
 
 ```
 src/
-├── types/          # Types partagés (DesignSystem, Inspection, Messages)
-├── lib/            # Utilitaires (colors, CSS parser, tokens, DOM, export, messaging, storage)
+├── types/          # Types partagés (DesignSystem, Inspection, Messages, Crawl, License)
+├── lib/            # Utilitaires (colors, CSS parser, tokens, markdown, crawler, license, export, storage)
 ├── background/     # Service worker (routing messages, commands, badge)
 ├── popup/          # Popup compact (quick actions)
 ├── content/        # Content scripts injectés dans les pages

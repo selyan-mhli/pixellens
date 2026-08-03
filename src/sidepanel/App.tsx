@@ -416,7 +416,7 @@ function App() {
             )
           })}
         </div>
-        <span className="text-[10px] text-panel-text-dim font-mono">v1.0.0</span>
+        <span className="text-[10px] text-panel-text-dim font-mono">v1.1.0</span>
       </footer>
 
       <CommandPalette

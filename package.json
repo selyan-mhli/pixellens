@@ -1,6 +1,6 @@
 {
   "name": "pixellens",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Inspect any website. Copy any design system.",
   "private": true,
   "type": "module",
