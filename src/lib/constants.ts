@@ -1,7 +1,6 @@
 // PixelLens — Product Constants
 //
-// Identifiant du produit sur ExtensionPay (extensionpay.com). La valeur TODO_*
-// est remplacée à la main après enregistrement de l'extension sur leur dashboard
-// (c'est le « extension id » choisi à l'inscription, pas l'ID Chrome).
+// Identifiant du produit sur ExtensionPay (extensionpay.com) — celui du dashboard
+// (`ExtPay('pixellens')`), pas l'ID Chrome de l'extension.
 
-export const EXTPAY_EXTENSION_ID = 'TODO_EXTPAY_EXTENSION_ID'
+export const EXTPAY_EXTENSION_ID = 'pixellens'
