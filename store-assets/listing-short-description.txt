@@ -1,0 +1,1 @@
+Turn any web page into clean Markdown for AI, and extract its full design system: colors, type, spacing, tokens. Local, no API key.
