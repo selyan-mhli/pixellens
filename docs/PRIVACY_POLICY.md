@@ -28,29 +28,35 @@ dans votre profil de navigateur :
 | Préférences d'affichage | `chrome.storage.sync` | Format de couleur (HEX/RGB/HSL), taille de grille, thème |
 | Historique de scans | `chrome.storage.local` | Les 20 derniers design systems extraits (couleurs, typo, spacings, URL et titre de la page scannée) |
 | État de l'interface | `chrome.storage.local` | Vue active du panneau, dernière conversion Markdown |
-| Licence Pro | `chrome.storage.local` | La clé de licence que vous avez saisie et la date de sa dernière vérification |
+| Statut Pro (cache) | `chrome.storage.local` | Votre statut gratuit/Pro, l'email du compte de paiement le cas échéant, la date de dernière vérification — ce cache permet de rester Pro hors ligne |
+| Cache ExtensionPay | `chrome.storage.sync` | Données techniques de la bibliothèque de paiement (statut utilisateur, date d'installation) |
 
 **Tout effacer** : supprimez l'extension (clic droit sur l'icône → « Retirer de
 Chrome ») — Chrome efface alors l'intégralité de ce stockage. Vous pouvez aussi
-vider l'historique depuis le panneau (Historique → « Clear History ») et retirer
-la licence depuis les Réglages (« Retirer la licence »).
+vider l'historique depuis le panneau (Historique → « Clear History »).
 
-## La seule requête sortante : la vérification de licence
+## Les seuls échanges réseau : le paiement Pro (ExtensionPay)
 
-Si — et seulement si — vous activez une licence Pro, PixelLens contacte
-l'API de Gumroad (`https://api.gumroad.com/v2/licenses/verify`) pour vérifier
-votre clé :
+PixelLens n'émet aucune requête vers ses propres serveurs — elle n'en a pas.
+Les seuls échanges réseau de l'extension elle-même concernent l'option Pro,
+via le service ExtensionPay (`extensionpay.com`) :
 
-- la requête ne transporte que **votre clé de licence** et **l'identifiant du
-  produit PixelLens** — rien d'autre ;
-- elle est émise à l'activation, puis au plus **une fois tous les 30 jours** ;
-- si le serveur est injoignable (hors ligne, panne), PixelLens **conserve votre
+- **quand ils ont lieu** : uniquement lorsque vous cliquez « Passer en Pro »
+  (ouverture de la page de paiement), « J'ai déjà payé » (restauration par
+  email), « Vérifier mon paiement » — puis, pour un utilisateur Pro, au plus
+  **une fois tous les 30 jours** pour confirmer le statut. Si vous n'utilisez
+  jamais l'option Pro, **aucune requête n'est émise** ;
+- **ce qui transite** : l'identifiant du produit PixelLens et un identifiant
+  technique d'installation généré par la bibliothèque de paiement ; votre
+  email uniquement si vous le saisissez vous-même sur la page de paiement ou
+  de restauration. Jamais votre navigation, jamais le contenu des pages ;
+- **hors ligne** : si le serveur est injoignable, PixelLens **conserve votre
   statut Pro** et n'envoie rien d'autre ;
-- sans licence saisie, cette requête n'est **jamais** émise.
+- le paiement par carte est traité par **Stripe** sur la page d'ExtensionPay —
+  votre numéro de carte ne passe jamais par l'extension.
 
-Le traitement de votre achat (paiement, email de confirmation) est réalisé par
-Gumroad et régi par sa propre politique de confidentialité :
-https://gumroad.com/privacy
+Politiques des prestataires : https://extensionpay.com/privacy ·
+https://stripe.com/privacy
 
 ## Le crawl de site
 

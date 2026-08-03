@@ -9,7 +9,7 @@
 
 import { LockSimple, Key } from '@phosphor-icons/react'
 import { usePanelStore } from '../store'
-import { GUMROAD_PRODUCT_URL } from '@/lib/constants'
+import { extpay } from '@/lib/extpay'
 
 type ProGateProps = {
   /** Ce qu'on débloque, en une phrase courte, à la 2ᵉ personne. */
@@ -26,16 +26,15 @@ type ProGateProps = {
  * inline, ex. édition de tokens dans DesignSystemView).
  */
 export function ProGateCard({ title, body }: { title: string; body: string }) {
-  const setMode = usePanelStore((s) => s.setMode)
-  const setSettingsFocusLicense = usePanelStore((s) => s.setSettingsFocusLicense)
-
+  // Paiement in-app via ExtensionPay : openPaymentPage ouvre l'onglet de paiement
+  // (Stripe) ; au retour, onPaid (App.tsx + service worker) débloque sans rechargement.
   const handleUpgrade = () => {
-    window.open(GUMROAD_PRODUCT_URL, '_blank', 'noopener,noreferrer')
+    extpay.openPaymentPage().catch((err) => console.error('[PixelLens]', err))
   }
 
-  const handleHaveKey = () => {
-    setSettingsFocusLicense(true)
-    setMode('settings')
+  // Achat déjà effectué sur un autre navigateur/profil : lien magique par email.
+  const handleRestore = () => {
+    extpay.openLoginPage().catch((err) => console.error('[PixelLens]', err))
   }
 
   return (
@@ -54,11 +53,11 @@ export function ProGateCard({ title, body }: { title: string; body: string }) {
         Passer en Pro — 19 € à vie
       </button>
       <button
-        onClick={handleHaveKey}
+        onClick={handleRestore}
         className="flex items-center gap-1 text-[11px] text-panel-text-dim hover:text-panel-text transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-accent rounded"
       >
         <Key size={11} />
-        J’ai déjà une clé
+        J’ai déjà payé
       </button>
     </div>
   )

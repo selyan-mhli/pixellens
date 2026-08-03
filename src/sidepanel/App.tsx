@@ -15,6 +15,7 @@ import { usePanelStore, type PanelMode } from './store'
 import { MessageType } from '@/types/messages'
 import { getDesignSystems } from '@/lib/storage'
 import { readLicense, refreshLicenseIfStale, writeLicense } from '@/lib/license'
+import { extpay, realLicenseDeps } from '@/lib/extpay'
 import { getHost } from '@/lib/url'
 import InspectorView from './views/InspectorView'
 import ScanView from './views/ScanView'
@@ -136,7 +137,7 @@ function App() {
       .then(async (stored) => {
         if (cancelled) return
         usePanelStore.getState().setLicense(stored)
-        const refreshed = await refreshLicenseIfStale(stored)
+        const refreshed = await refreshLicenseIfStale(stored, realLicenseDeps)
         if (cancelled || refreshed === stored) return
         await writeLicense(refreshed)
         if (!cancelled) usePanelStore.getState().setLicense(refreshed)
@@ -145,6 +146,24 @@ function App() {
     return () => {
       cancelled = true
     }
+  }, [])
+
+  // Déblocage instantané : quand le paiement (ou la restauration par email) aboutit
+  // sur extensionpay.com, onPaid est relayé jusqu'ici — le panneau passe Pro sans
+  // rechargement. Le service worker persiste aussi de son côté (panneau fermé).
+  // ExtPay n'expose pas de removeListener ; le contexte du panel est détruit à sa
+  // fermeture (MV3), donc un enregistrement par montage suffit.
+  useEffect(() => {
+    extpay.onPaid.addListener((user) => {
+      const next = {
+        tier: 'pro' as const,
+        email: user.email ?? null,
+        verifiedAt: new Date().toISOString(),
+        lastError: null,
+      }
+      writeLicense(next).catch((err) => console.error('[PixelLens]', err))
+      usePanelStore.getState().setLicense(next)
+    })
   }, [])
 
   // Track the URL of the tab currently in front of the user so the views can

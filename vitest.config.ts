@@ -10,6 +10,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      // Le vrai `extpay` s'auto-exécute à l'import et exige les API WebExtension,
+      // absentes sous jsdom — les tests reçoivent un stub inerte à la place.
+      extpay: path.resolve(__dirname, './src/test/extpay-stub.ts'),
     },
   },
 });

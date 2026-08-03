@@ -21,7 +21,7 @@ import { MessageType } from '@/types/messages'
 import { copyToClipboard, downloadMarkdown } from '@/lib/export'
 import { downloadCrawlZip } from '@/lib/crawl-zip'
 import MarkdownPreview from '../components/MarkdownPreview'
-import { GUMROAD_PRODUCT_URL } from '@/lib/constants'
+import { extpay } from '@/lib/extpay'
 
 // Limite du crawl GRATUIT. Appliquée ici, dans l'orchestration (payload CRAWL_SITE),
 // jamais dans lib/crawler — ce module reste pur et agnostique du business model.
@@ -383,7 +383,7 @@ function CrawlView() {
               100 pages).
             </p>
             <button
-              onClick={() => window.open(GUMROAD_PRODUCT_URL, '_blank', 'noopener,noreferrer')}
+              onClick={() => extpay.openPaymentPage().catch((err) => console.error('[PixelLens]', err))}
               className="shrink-0 px-2 py-1 rounded-md bg-panel-accent text-white text-[10px] font-medium hover:bg-panel-accent-hover transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-accent focus-visible:ring-offset-1 focus-visible:ring-offset-panel-bg"
             >
               Go Pro — 19 €

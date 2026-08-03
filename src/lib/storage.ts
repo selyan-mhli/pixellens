@@ -48,9 +48,9 @@ export async function getLatestDesignSystem(): Promise<DesignSystem | null> {
 }
 
 // --- License ---
-// État de la licence Pro (clé Gumroad + résultat de la dernière vérification).
-// chrome.storage.local (jamais sync) : la clé ne doit pas voyager entre appareils
-// à l'insu de l'utilisateur, et local survit aux redémarrages du navigateur.
+// Statut Pro mis en cache (résultat de la dernière vérification ExtensionPay).
+// chrome.storage.local : survit aux redémarrages du navigateur — c'est ce cache
+// qui permet à un utilisateur Pro de le rester hors ligne (fail-open).
 
 export const LICENSE_STORAGE_KEY = 'pixellens:license'
 

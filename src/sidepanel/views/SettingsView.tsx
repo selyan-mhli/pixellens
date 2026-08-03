@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-import { Palette, SealCheck, CircleNotch, Key } from '@phosphor-icons/react'
+import { useState } from 'react'
+import { useEffect } from 'react'
+import { Palette, SealCheck, CircleNotch, Key, ArrowsClockwise } from '@phosphor-icons/react'
 import { usePanelStore } from '../store'
 import { getPreferences, setPreferences } from '@/lib/storage'
-import { verifyLicense, writeLicense, DEFAULT_LICENSE } from '@/lib/license'
-import { GUMROAD_PRODUCT_URL } from '@/lib/constants'
+import { checkPaidStatus, applyOutcome, writeLicense } from '@/lib/license'
+import { extpay, realLicenseDeps } from '@/lib/extpay'
 import ColorSwatch from '../components/ColorSwatch'
-import type { LicenseState } from '@/types/license'
 
 type ColorFormat = 'hex' | 'rgb' | 'hsl'
 
@@ -18,78 +18,50 @@ const COLOR_FORMATS: { id: ColorFormat; label: string }[] = [
 // Brand accent — gives the live preview an on-page sample to format.
 const PREVIEW_COLOR = '#6366F1'
 
-/** Masque une clé pour l'affichage : `XXXX-…-1234` (on ne montre que la fin). */
-function maskKey(key: string): string {
-  if (key.length <= 4) return 'XXXX'
-  return `XXXX-…-${key.slice(-4)}`
-}
-
-/** Formulations humaines, jamais alarmistes, des issues d'activation. */
-const VERIFY_ERRORS: Record<'invalid' | 'revoked' | 'unreachable', string> = {
-  invalid: 'Cette clé n’est pas reconnue. Vérifiez l’email de confirmation Gumroad.',
-  revoked: 'Cette licence n’est plus active (remboursement ou annulation).',
-  unreachable: 'Impossible de joindre le serveur de licence. Réessayez plus tard.',
-}
-
-// Section « Licence » — seule UI de gestion de la clé Gumroad.
+// Section « Licence » — paiement in-app via ExtensionPay, aucune clé à saisir.
 // Règle : `unreachable` sur un utilisateur DÉJÀ Pro ne change rien à son état.
 function LicenseSection() {
   const license = usePanelStore((s) => s.license)
   const isPro = usePanelStore((s) => s.isPro)
   const setLicense = usePanelStore((s) => s.setLicense)
-  const focusRequested = usePanelStore((s) => s.settingsFocusLicense)
-  const setSettingsFocusLicense = usePanelStore((s) => s.setSettingsFocusLicense)
 
-  const [keyInput, setKeyInput] = useState('')
-  const [verifying, setVerifying] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [confirmRemove, setConfirmRemove] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [checking, setChecking] = useState(false)
+  const [message, setMessage] = useState<string | null>(null)
 
-  // Focus one-shot demandé par « J'ai déjà une clé » (ProGate) — puis consommé.
-  useEffect(() => {
-    if (!focusRequested) return
-    inputRef.current?.focus()
-    setSettingsFocusLicense(false)
-  }, [focusRequested, setSettingsFocusLicense])
-
-  const handleActivate = async () => {
-    const key = keyInput.trim()
-    if (!key || verifying) return
-    setVerifying(true)
-    setError(null)
+  // Vérification manuelle (« Vérifier mon paiement » / « Re-vérifier ») : consulte
+  // ExtensionPay et applique l'issue. Fail-open : `unreachable` n'altère jamais
+  // l'état — un Pro hors ligne reste Pro, seul un message informatif s'affiche.
+  const handleCheck = async () => {
+    if (checking) return
+    setChecking(true)
+    setMessage(null)
     try {
-      const outcome = await verifyLicense(key)
-      if (outcome.status === 'valid') {
-        const next: LicenseState = {
-          tier: 'pro',
-          key,
-          verifiedAt: outcome.verifiedAt,
-          lastError: null,
-        }
+      const outcome = await checkPaidStatus(realLicenseDeps)
+      if (outcome.status === 'unreachable') {
+        setMessage('Impossible de joindre le serveur de paiement. Réessayez plus tard.')
+        return
+      }
+      if (outcome.status === 'unpaid' && !isPro) {
+        setMessage(
+          'Aucun paiement trouvé pour ce navigateur. Déjà payé ailleurs ? Utilisez « J’ai déjà payé ».',
+        )
+      }
+      const next = applyOutcome(license, outcome)
+      if (next !== license) {
         await writeLicense(next)
         setLicense(next)
-        setKeyInput('')
-      } else {
-        // invalid / revoked / unreachable : on affiche l'erreur SANS toucher à
-        // l'état existant — un Pro qui re-teste une clé hors ligne reste Pro.
-        setError(VERIFY_ERRORS[outcome.status])
       }
     } finally {
-      setVerifying(false)
+      setChecking(false)
     }
   }
 
-  const handleRemove = async () => {
-    if (!confirmRemove) {
-      setConfirmRemove(true)
-      return
-    }
-    const next: LicenseState = { ...DEFAULT_LICENSE }
-    await writeLicense(next)
-    setLicense(next)
-    setConfirmRemove(false)
-    setError(null)
+  const handleUpgrade = () => {
+    extpay.openPaymentPage().catch((err) => console.error('[PixelLens]', err))
+  }
+
+  const handleRestore = () => {
+    extpay.openLoginPage().catch((err) => console.error('[PixelLens]', err))
   }
 
   let verifiedLabel: string | null = null
@@ -110,72 +82,64 @@ function LicenseSection() {
         <h2 className="text-[12px] font-semibold text-panel-text">Licence</h2>
       </div>
 
-      {isPro && license.key ? (
+      {isPro ? (
         <div className="p-3 rounded-lg bg-panel-surface border border-panel-border">
           <div className="flex items-center gap-1.5 mb-1">
             <SealCheck size={14} weight="fill" className="text-success" />
             <p className="text-[12px] font-semibold text-panel-text">PixelLens Pro ✓</p>
           </div>
-          <p className="text-[11px] text-panel-text-dim font-mono">{maskKey(license.key)}</p>
+          {license.email && (
+            <p className="text-[11px] text-panel-text-dim font-mono">{license.email}</p>
+          )}
           {verifiedLabel && (
             <p className="text-[10px] text-panel-text-dim mt-0.5">Vérifiée le {verifiedLabel}</p>
           )}
-          {error && (
-            <p className="text-[11px] text-panel-text-dim leading-relaxed mt-2">{error}</p>
+          {message && (
+            <p className="text-[11px] text-panel-text-dim leading-relaxed mt-2">{message}</p>
           )}
           <button
-            onClick={handleRemove}
-            onBlur={() => setConfirmRemove(false)}
-            className={`mt-2.5 text-[10px] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-accent rounded ${
-              confirmRemove
-                ? 'text-red-400 font-medium'
-                : 'text-panel-text-dim hover:text-panel-text'
-            }`}
+            onClick={() => void handleCheck()}
+            disabled={checking}
+            className="mt-2.5 flex items-center gap-1 text-[10px] text-panel-text-dim hover:text-panel-text transition-colors duration-150 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-accent rounded"
           >
-            {confirmRemove ? 'Confirmer le retrait ? (clic pour retirer)' : 'Retirer la licence'}
+            {checking ? (
+              <CircleNotch size={10} className="animate-spin" />
+            ) : (
+              <ArrowsClockwise size={10} />
+            )}
+            {checking ? 'Vérification…' : 'Re-vérifier mon paiement'}
           </button>
         </div>
       ) : (
         <div className="p-3 rounded-lg bg-panel-surface border border-panel-border">
           <p className="text-[11px] text-panel-text-dim mb-2.5">Version gratuite</p>
           <button
-            onClick={() => window.open(GUMROAD_PRODUCT_URL, '_blank', 'noopener,noreferrer')}
+            onClick={handleUpgrade}
             className="w-full px-3 py-2 rounded-lg bg-panel-accent text-white text-[12px] font-medium hover:bg-panel-accent-hover transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-accent focus-visible:ring-offset-2 focus-visible:ring-offset-panel-bg"
           >
             Passer en Pro — 19 € à vie
           </button>
-          <label className="block mt-3">
-            <span className="text-[10px] uppercase tracking-wide text-panel-text-dim">
-              Clé de licence
-            </span>
-            <div className="flex gap-2 mt-1">
-              <input
-                ref={inputRef}
-                value={keyInput}
-                onChange={(e) => setKeyInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') void handleActivate()
-                }}
-                disabled={verifying}
-                placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"
-                spellCheck={false}
-                className="flex-1 min-w-0 text-[11px] font-mono text-panel-text bg-panel-bg border border-panel-border rounded-lg px-2 py-1.5 placeholder:text-panel-text-dim/50 focus:outline-none focus:border-panel-accent disabled:opacity-50"
-              />
-              <button
-                onClick={() => void handleActivate()}
-                disabled={verifying || !keyInput.trim()}
-                className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-panel-border text-panel-text text-[11px] font-medium hover:bg-panel-bg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-accent focus-visible:ring-offset-1 focus-visible:ring-offset-panel-bg"
-              >
-                {verifying && <CircleNotch size={12} className="animate-spin" />}
-                {verifying ? 'Vérification…' : 'Activer'}
-              </button>
-            </div>
-          </label>
-          {/* Erreur locale d'activation, sinon la dernière erreur persistée (ex. une
-              licence dégradée par la re-vérification des 30 jours). */}
-          {(error || license.lastError) && (
+          <div className="flex items-center justify-between mt-2.5">
+            <button
+              onClick={handleRestore}
+              className="text-[11px] text-panel-text-dim hover:text-panel-text transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-accent rounded"
+            >
+              J’ai déjà payé
+            </button>
+            <button
+              onClick={() => void handleCheck()}
+              disabled={checking}
+              className="flex items-center gap-1 text-[11px] text-panel-text-dim hover:text-panel-text transition-colors duration-150 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-accent rounded"
+            >
+              {checking && <CircleNotch size={10} className="animate-spin" />}
+              {checking ? 'Vérification…' : 'Vérifier mon paiement'}
+            </button>
+          </div>
+          {/* Message local, sinon la dernière erreur persistée (ex. un statut Pro
+              dégradé par la re-vérification des 30 jours). */}
+          {(message || license.lastError) && (
             <p className="text-[11px] text-panel-text-dim leading-relaxed mt-2">
-              {error ?? license.lastError}
+              {message ?? license.lastError}
             </p>
           )}
         </div>
