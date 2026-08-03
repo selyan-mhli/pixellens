@@ -1,6 +1,7 @@
 // PixelLens — Chrome Storage Wrapper
 
 import type { DesignSystem } from '@/types/design-system'
+import type { LicenseState } from '@/types/license'
 import type { Preferences } from '@/types/messages'
 import type { StateStorage } from 'zustand/middleware'
 
@@ -44,6 +45,26 @@ export async function getDesignSystems(): Promise<DesignSystem[]> {
 export async function getLatestDesignSystem(): Promise<DesignSystem | null> {
   const scans = await getDesignSystems()
   return scans[0] || null
+}
+
+// --- License ---
+// État de la licence Pro (clé Gumroad + résultat de la dernière vérification).
+// chrome.storage.local (jamais sync) : la clé ne doit pas voyager entre appareils
+// à l'insu de l'utilisateur, et local survit aux redémarrages du navigateur.
+
+export const LICENSE_STORAGE_KEY = 'pixellens:license'
+
+export async function getStoredLicense(): Promise<LicenseState | null> {
+  const result = await chrome.storage.local.get(LICENSE_STORAGE_KEY)
+  return (result[LICENSE_STORAGE_KEY] as LicenseState | undefined) ?? null
+}
+
+export async function setStoredLicense(state: LicenseState): Promise<void> {
+  await chrome.storage.local.set({ [LICENSE_STORAGE_KEY]: state })
+}
+
+export async function clearStoredLicense(): Promise<void> {
+  await chrome.storage.local.remove(LICENSE_STORAGE_KEY)
 }
 
 // --- Zustand persistence adapter ---
