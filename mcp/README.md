@@ -8,7 +8,8 @@ poorly or not at all. This one asks your Chrome to read the page you are
 actually looking at.
 
 Requires the [PixelLens](https://chromewebstore.google.com/detail/pixellens/mdjbknfjgpehbcdohjejobngijmhnfmm)
-extension, version 1.2 or later.
+extension, version 1.2 or later, with **Pro** unlocked (19 € once, for life).
+The server itself is free and open source; it needs a Pro extension to pair with.
 
 ## Setup
 

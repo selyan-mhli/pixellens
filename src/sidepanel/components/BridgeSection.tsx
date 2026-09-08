@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { PlugsConnected, CheckCircle, WarningCircle, CircleNotch } from '@phosphor-icons/react'
+import { PlugsConnected, CheckCircle, WarningCircle, CircleNotch, Lock } from '@phosphor-icons/react'
 import { BRIDGE_SETTINGS_KEY, BRIDGE_STATUS_KEY } from '@/background/mcp-wiring'
+import { usePanelStore } from '../store'
 import { DEFAULT_BRIDGE_SETTINGS, type BridgeSettings, type BridgeStatus } from '@/lib/mcp-bridge'
 
 /**
@@ -20,6 +21,7 @@ const STATUS_LABEL: Record<BridgeStatus, string> = {
 }
 
 function BridgeSection() {
+  const isPro = usePanelStore((s) => s.isPro)
   const [settings, setSettings] = useState<BridgeSettings>(DEFAULT_BRIDGE_SETTINGS)
   const [status, setStatus] = useState<BridgeStatus>('off')
   const [detail, setDetail] = useState<string | null>(null)
@@ -61,6 +63,28 @@ function BridgeSection() {
   }
 
   if (!loaded) return null
+
+  // Fonctionnalité Pro. L'interface le dit avant que l'utilisateur essaie,
+  // plutôt que de laisser un interrupteur qui ne ferait rien.
+  if (!isPro) {
+    return (
+      <section>
+        <div className="flex items-center gap-2 mb-1.5">
+          <PlugsConnected size={14} weight="bold" className="text-panel-accent" />
+          <h2 className="text-[12px] font-semibold text-panel-text">Local AI bridge</h2>
+          <span className="ml-auto flex items-center gap-1 text-[10px] uppercase tracking-wide text-panel-accent">
+            <Lock size={10} weight="bold" />
+            Pro
+          </span>
+        </div>
+        <p className="text-[11px] text-panel-text-dim leading-relaxed">
+          Lets an assistant on this machine read the page you are on, through
+          PixelLens, with your own session. Included in Pro, along with Copy for
+          LLM, token exports and the full crawl.
+        </p>
+      </section>
+    )
+  }
 
   const Icon =
     status === 'connected' ? CheckCircle : status === 'connecting' ? CircleNotch : WarningCircle

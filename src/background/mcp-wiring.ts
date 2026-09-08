@@ -7,6 +7,7 @@ import { MessageType } from '@/types/messages'
 import type { MarkdownResult } from '@/types/markdown'
 import type { DesignSystem } from '@/types/design-system'
 import { buildLlmBundle } from '@/lib/llm-bundle'
+import { readLicense } from '@/lib/license'
 import { renderPageInTab, type TabRenderDeps } from '@/lib/tab-render'
 import {
   McpBridgeClient,
@@ -112,6 +113,20 @@ export async function readBridgeSettings(): Promise<BridgeSettings> {
 }
 
 /**
+ * Le pont est une fonctionnalité Pro, et le contrôle vit ICI, dans le service
+ * worker, pas seulement dans l'interface : une case cochée à la main dans le
+ * stockage ne doit pas suffire à ouvrir le pont.
+ *
+ * Lecture locale uniquement, jamais d'appel réseau : un Pro hors ligne reste
+ * Pro, comme partout ailleurs dans l'extension.
+ */
+async function bridgeAllowed(settings: BridgeSettings): Promise<boolean> {
+  if (!settings.enabled || !settings.token) return false
+  const license = await readLicense()
+  return license.tier === 'pro'
+}
+
+/**
  * Démarre le pont et le garde aligné sur les réglages, sans redémarrage.
  *
  * Ne jette jamais : ce code s'exécute au chargement du service worker, et une
@@ -131,15 +146,28 @@ export function installBridge(deps: TabRenderDeps): McpBridgeClient | null {
       },
     )
 
-    void readBridgeSettings()
-      .then((settings) => client.start(settings))
-      .catch(() => {})
-
-    chrome.storage.onChanged.addListener((changes, area) => {
-      if (area !== 'local' || !changes[BRIDGE_SETTINGS_KEY]) return
-      void readBridgeSettings()
-        .then((settings) => client.start(settings))
+    const sync = () =>
+      readBridgeSettings()
+        .then(async (settings) => {
+          if (await bridgeAllowed(settings)) {
+            client.start(settings)
+          } else {
+            client.stop()
+            await chrome.storage.local.set({
+              [BRIDGE_STATUS_KEY]: { status: 'off', at: Date.now() },
+            })
+          }
+        })
         .catch(() => {})
+
+    void sync()
+
+    // Les réglages ET la licence peuvent changer : un achat doit ouvrir le pont
+    // sans redémarrer le navigateur, une licence retombée en gratuit doit le fermer.
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area !== 'local') return
+      if (!changes[BRIDGE_SETTINGS_KEY] && !changes['pixellens:license']) return
+      void sync()
     })
 
     return client

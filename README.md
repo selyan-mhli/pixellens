@@ -64,11 +64,13 @@ Règle produit : *ce qui regarde est gratuit, ce qui emporte est Pro.*
 | Vérificateur de contraste WCAG | ✅ | ✅ |
 | Grid overlay + mesure de distances | ✅ | ✅ |
 | Page courante → Markdown (copie et téléchargement) | ✅ | ✅ |
+| Estimation du nombre de tokens du document | ✅ | ✅ |
 | Édition des tokens (renommer, supprimer) | ❌ | ✅ |
 | Exports : CSS Variables, Tailwind, JSON, palette PNG | ❌ | ✅ |
 | « Copy for LLM » (contenu + design system + métadonnées) | ❌ | ✅ |
 | Crawl de site au-delà de 3 pages (jusqu'à 100) | ❌ | ✅ |
 | Historique des scans au-delà des 3 derniers | ❌ | ✅ |
+| Pont local pour assistants (MCP) : l'IA lit vos onglets | ❌ | ✅ |
 
 Les échanges avec `extensionpay.com` (achat / restauration / vérification du
 statut Pro) sont les **seules** requêtes réseau émises par l'extension
