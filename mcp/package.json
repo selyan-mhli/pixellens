@@ -1,0 +1,33 @@
+{
+  "name": "pixellens-mcp",
+  "version": "0.1.0",
+  "description": "Let your AI read pages from your own browser, with your own session, through the PixelLens extension.",
+  "type": "module",
+  "bin": {
+    "pixellens-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "node --test test/*.test.js",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "ws": "^8.18.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/ws": "^8.5.13",
+    "typescript": "^5.7.2"
+  },
+  "license": "MIT"
+}

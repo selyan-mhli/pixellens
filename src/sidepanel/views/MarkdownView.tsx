@@ -15,12 +15,14 @@ import {
   Table,
   Code,
   Sparkle,
+  Coins,
 } from '@phosphor-icons/react'
 import { usePanelStore } from '../store'
 import { sendMessage } from '@/lib/messaging'
 import { MessageType } from '@/types/messages'
 import { copyToClipboard, downloadMarkdown } from '@/lib/export'
 import { buildLlmBundle } from '@/lib/llm-bundle'
+import { estimateTokens, formatTokens } from '@/lib/tokens'
 import type { MarkdownFrontmatter, MarkdownResult } from '@/types/markdown'
 import MarkdownPreview from '../components/MarkdownPreview'
 import ProGate from '../components/ProGate'
@@ -159,7 +161,24 @@ function MarkdownView() {
   // Success — preview + meta + actions
   const { frontmatter: fm, stats } = result
 
-  const chips: { icon: typeof TextHOne; value: number; label: string }[] = [
+  // Estimation, pas un compte exact : chaque modele a son propre tokeniseur.
+  // Affichee avec un « ~ » pour que personne ne la prenne pour une mesure.
+  const tokens = estimateTokens(result.fullDocument)
+
+  const chips: {
+    icon: typeof TextHOne
+    value: number
+    label: string
+    display?: string
+    title?: string
+  }[] = [
+    {
+      icon: Coins,
+      value: tokens,
+      label: 'tokens',
+      display: `~${formatTokens(tokens)}`,
+      title: `~${tokens.toLocaleString()} tokens, estimated. Exact count depends on the model.`,
+    },
     { icon: TextAlignLeft, value: fm.wordCount, label: 'words' },
     { icon: TextHOne, value: stats.headings, label: 'headings' },
     { icon: LinkSimple, value: stats.links, label: 'links' },
@@ -235,11 +254,13 @@ function MarkdownView() {
             return (
               <span
                 key={chip.label}
-                title={`${chip.value.toLocaleString()} ${chip.label}`}
+                title={chip.title ?? `${chip.value.toLocaleString()} ${chip.label}`}
                 className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-panel-surface border border-panel-border text-[10px] text-panel-text-dim"
               >
                 <Icon size={11} className="text-panel-text-dim" />
-                <span className="text-panel-text font-mono">{chip.value.toLocaleString()}</span>
+                <span className="text-panel-text font-mono">
+                  {chip.display ?? chip.value.toLocaleString()}
+                </span>
               </span>
             )
           })}
