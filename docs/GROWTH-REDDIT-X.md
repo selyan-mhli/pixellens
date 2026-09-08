@@ -16,6 +16,34 @@
 Un mois en ligne, 2 utilisateurs. Ce n'est pas un problème de produit, c'est un
 problème de distribution. Tout ce qui suit ne sert qu'à ça.
 
+## Révision du 08/09 : l'angle a changé
+
+L'analyse concurrentielle a montré que « page vers Markdown » est un marché
+saturé et largement gratuit (LLMFeeder est open source et compte déjà les
+tokens, Copy as Markdown fait le frontmatter YAML), et que côté design system
+MiroMiro exporte déjà des tokens Tailwind avec un vérificateur de contraste.
+Poster sur cet angle, c'est arriver dixième.
+
+**Le nouvel angle est le pont MCP.** Les lecteurs de pages hébergés (Jina,
+Firecrawl) récupèrent l'URL depuis leurs serveurs : ils ne voient jamais ce qui
+est derrière un login et rendent mal les applications JavaScript. PixelLens fait
+lire l'assistant depuis le navigateur de l'utilisateur, avec sa session. Cette
+limite des concurrents est structurelle, pas un retard de fonctionnalité : ils ne
+peuvent pas la corriger sans devenir, eux aussi, une extension.
+
+Phrase de tête : **« Your AI reads the page you are on. Login and all. »**
+
+Conséquences sur ce plan :
+
+- Subreddits prioritaires : r/mcp, r/ClaudeAI, r/ChatGPTCoding, r/cursor.
+  r/webdev et r/web_design reculent en second rideau, ils servaient l'ancien angle.
+- Le post qui a une chance n'est pas « j'ai fait une extension », c'est le
+  problème résolu : « mon assistant ne pouvait pas lire mes pages authentifiées,
+  voilà ce que j'ai construit », méthode entière donnée, sans lien.
+- Prérequis absolu : le pont doit être publié avant le premier post. Poster sur
+  une fonctionnalité qui n'est pas dans la version du store est le meilleur moyen
+  de brûler l'angle et le compte en même temps.
+
 ## Le pitch, en une phrase
 
 > Feed your AI real pages, not screenshots.
