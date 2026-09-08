@@ -71,3 +71,44 @@ for f in 01-copy-for-llm 02-crawl 03-design-system 04-export-tailwind 05-inspect
     --screenshot="../screenshots/$f.png" "file://$PWD/$f.html"
 done
 ```
+
+---
+
+## Mise à jour 1.1.0 → 1.2.0 (08/09/2026)
+
+Ce n'est pas une nouvelle fiche : on téléverse une nouvelle version sur la fiche
+existante (`mdjbknfjgpehbcdohjejobngijmhnfmm`). Ce qui change dans le dashboard :
+
+| Onglet | Action |
+|---|---|
+| Package | Téléverser `pixellens-1.2.0.zip` (racine du projet, non versionné) |
+| Store listing | Remplacer les descriptions longues EN et FR par celles de `docs/STORE_LISTING.md` (elles gagnent la section « pont local ») |
+| Privacy practices | **Ajouter la justification de `optional_host_permissions`** — texte prêt dans `docs/STORE_LISTING.md` |
+| Privacy practices | Les autres justifications sont inchangées, ne pas les réécrire |
+
+### Pourquoi cette version repasse en revue
+
+L'ajout d'une permission, même optionnelle, et une communication vers un serveur
+local sont deux motifs d'examen manuel. Google regarde en priorité les
+extensions qui parlent à `localhost` : c'est un vecteur de malware classique.
+
+Ce qui joue en notre faveur, et qu'il faut savoir défendre si un reviewer écrit :
+
+- la permission est **optionnelle**, pas demandée à l'installation ; une
+  installation neuve n'a toujours aucune permission d'hôte
+- l'adresse est codée en dur sur la boucle locale (`ws://127.0.0.1`), seul le
+  port est configurable ; aucun hôte distant n'est joignable
+- le serveur compagnon est publié en source ouverte (`pixellens-mcp` sur npm),
+  donc auditable
+- le pont est éteint par défaut et exige un jeton généré localement
+
+### Avant de téléverser
+
+- [ ] `npm test` (267 tests) et `npm run build` verts
+- [ ] `cd mcp && npm test` (9 tests) vert
+- [ ] Vérifier dans le zip : `version` = 1.2.0, `optional_host_permissions`
+      présente, `host_permissions` absente
+- [ ] Publier `pixellens-mcp` sur npm **avant** l'extension : la fiche mentionne
+      la commande `npx pixellens-mcp`, un utilisateur qui la lance dans le vide
+      laisse un avis à une étoile
+- [ ] Ne mettre la landing en ligne qu'une fois la version approuvée

@@ -1,6 +1,6 @@
 # PixelLens — Fiche Chrome Web Store
 
-> Texte exact à coller dans le dashboard CWS. Dérivé du code réel (v1.1.0).
+> Texte exact à coller dans le dashboard CWS. Dérivé du code réel (v1.2.0).
 > Les justifications de permissions décrivent ce que le code fait, fichier à l'appui.
 
 ## Nom
@@ -72,9 +72,18 @@ PixelLens ever talks to is ExtensionPay (extensionpay.com), and only when you
 buy, restore or verify the optional Pro upgrade. Site crawling happens from
 your own browser, on the site you chose, with your own session.
 
-Free forever for inspecting, scanning, contrast checking and single-page
-Markdown. Pro is a one-time 19 € in-app purchase (Stripe via ExtensionPay):
-lifetime, no subscription, no license key to manage.
+■ LOCAL AI BRIDGE (Pro, off by default)
+Run the companion server on your own machine (npx pixellens-mcp) and your
+assistant can ask for the page you are on, or open a URL in your browser and
+read it back, without you copying anything. Unlike hosted page readers, which
+fetch URLs from their own servers, this reads from your browser and your
+session: pages behind a login and JavaScript-heavy apps work. The bridge only
+ever talks to 127.0.0.1, is off until you turn it on, and asks for the
+localhost permission only at that moment.
+
+Free forever for inspecting, scanning, contrast checking, token estimation and
+single-page Markdown. Pro is a one-time 19 € in-app purchase (Stripe via
+ExtensionPay): lifetime, no subscription, no license key to manage.
 ```
 
 ## Description longue — FR
@@ -124,9 +133,18 @@ uniquement quand vous achetez, restaurez ou vérifiez l'option Pro. Le crawl
 s'effectue depuis votre propre navigateur, sur le site que vous avez choisi,
 avec votre propre session.
 
-Gratuit à vie pour l'inspection, le scan, le contraste et le Markdown d'une
-page. Pro : achat intégré unique de 19 € (Stripe via ExtensionPay), à vie,
-sans abonnement, sans clé de licence à gérer.
+■ PONT LOCAL POUR ASSISTANTS (Pro, éteint par défaut)
+Lancez le serveur compagnon sur votre machine (npx pixellens-mcp) et votre
+assistant peut réclamer la page que vous avez sous les yeux, ou ouvrir une URL
+dans votre navigateur et la lire, sans que vous copiiez quoi que ce soit. Les
+lecteurs de pages hébergés récupèrent l'URL depuis leurs serveurs : ils ne
+voient rien derrière une connexion. Ici c'est votre navigateur qui lit, avec
+votre session. Le pont ne parle qu'à 127.0.0.1, reste éteint tant que vous ne
+l'allumez pas, et ne demande la permission localhost qu'à ce moment-là.
+
+Gratuit à vie pour l'inspection, le scan, le contraste, l'estimation du nombre
+de tokens et le Markdown d'une page. Pro : achat intégré unique de 19 €
+(Stripe via ExtensionPay), à vie, sans abonnement, sans clé de licence à gérer.
 ```
 
 ## Justifications des permissions
@@ -188,6 +206,29 @@ Toutes les actions « Copier » du panneau (valeur CSS individuelle, tokens
 exportés, Markdown de page, document de crawl, bundle LLM) passent par
 `navigator.clipboard.writeText` (`src/lib/export.ts`). C'est le geste central
 du produit : copier pour coller dans un éditeur ou un assistant IA.
+
+### `optional_host_permissions` : `http://127.0.0.1/*` (nouveau en 1.2.0)
+
+**Non demandée à l'installation.** L'extension ne la réclame qu'au moment précis
+où l'utilisateur active « Local AI bridge » dans les réglages
+(`chrome.permissions.request`, `src/sidepanel/components/BridgeSection.tsx`).
+Tant que le pont est éteint, l'extension n'a aucune permission réseau.
+
+À quoi elle sert : ouvrir une connexion WebSocket vers un serveur que
+l'utilisateur a lui-même lancé sur SA machine (`ws://127.0.0.1:8787`,
+`src/lib/mcp-bridge.ts`), afin qu'un assistant local puisse demander la page
+active convertie en Markdown. Le serveur est distribué séparément, en source
+ouverte, sous le nom `pixellens-mcp`.
+
+Ce qui ne se produit jamais : aucune connexion vers un hôte distant, aucune
+donnée envoyée hors de la machine. L'adresse est codée en dur sur la boucle
+locale, seul le port est configurable. Le pont exige un jeton partagé, généré
+par le serveur de l'utilisateur, et le serveur refuse au handshake toute
+connexion dont l'origine n'est pas `chrome-extension://`.
+
+L'ensemble est éteint par défaut : `DEFAULT_BRIDGE_SETTINGS.enabled === false`
+(`src/lib/mcp-bridge.ts`), et le service worker vérifie en plus la licence avant
+d'ouvrir quoi que ce soit (`bridgeAllowed`, `src/background/mcp-wiring.ts`).
 
 ### Content script sur `https://extensionpay.com/*`
 
