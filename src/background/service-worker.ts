@@ -8,6 +8,7 @@ import { saveDesignSystem } from '@/lib/storage'
 import { renderPageInTab, type TabRenderDeps } from '@/lib/tab-render'
 import { writeLicense } from '@/lib/license'
 import { EXTPAY_EXTENSION_ID } from '@/lib/constants'
+import { installBridge } from './mcp-wiring'
 
 // ExtensionPay DOIT être initialisé dans le service worker (startBackground) pour
 // que la page de paiement puisse dialoguer avec l'extension. Le listener onPaid
@@ -356,3 +357,10 @@ export const realTabRenderDeps: TabRenderDeps = {
   removeTab: (tabId: number): Promise<void> => chrome.tabs.remove(tabId).then(() => {}),
 }
 
+
+// --- Pont local pour les assistants (MCP) ------------------------------------------
+//
+// Démarré ici parce que le service worker est la seule partie de l'extension
+// toujours vivante quand le panneau est fermé. Le pont ne fait rien tant qu'il
+// n'est pas activé dans les réglages : sans jeton, il ne se connecte même pas.
+installBridge(realTabRenderDeps)

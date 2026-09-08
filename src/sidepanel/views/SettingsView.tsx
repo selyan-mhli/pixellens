@@ -6,6 +6,7 @@ import { getPreferences, setPreferences } from '@/lib/storage'
 import { checkPaidStatus, applyOutcome, writeLicense } from '@/lib/license'
 import { extpay, realLicenseDeps } from '@/lib/extpay'
 import ColorSwatch from '../components/ColorSwatch'
+import BridgeSection from '../components/BridgeSection'
 
 type ColorFormat = 'hex' | 'rgb' | 'hsl'
 
@@ -181,6 +182,8 @@ function SettingsView() {
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto p-3 space-y-5">
         <LicenseSection />
+
+        <BridgeSection />
 
         <section>
           <div className="flex items-center gap-2 mb-1.5">
