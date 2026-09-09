@@ -1,12 +1,18 @@
 // Génère les 5 mockups HTML 1280×800 des captures Chrome Web Store de PixelLens.
 // L'UI du side panel est reproduite fidèlement (tokens de src/styles/globals.css).
 // Sites d'arrière-plan FICTIFS (aucune marque réelle).
-import { writeFileSync, mkdirSync } from 'node:fs'
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const out = dirname(fileURLToPath(import.meta.url))
 mkdirSync(out, { recursive: true })
+
+// Version lue dans le manifeste, jamais ecrite en dur ici. Elle etait figee a
+// v1.1.0 alors que l'extension etait publiee en 1.2.0 : les captures du Chrome
+// Web Store ET celles de la landing annoncaient donc une version qui n'existait
+// plus. Un numero recopie a la main derive a la publication suivante.
+const VERSION = JSON.parse(readFileSync(join(out, '..', '..', 'manifest.json'), 'utf8')).version
 
 const CSS = `
 *{margin:0;padding:0;box-sizing:border-box}
@@ -90,7 +96,7 @@ function panel({ activeTab = -1, activeFoot = -1, body }) {
     </div>
   </div>
   <div class="p-body">${body}</div>
-  <div class="p-foot">${footIcons(activeFoot)}<span class="ver">v1.1.0</span></div>
+  <div class="p-foot">${footIcons(activeFoot)}<span class="ver">v${VERSION}</span></div>
 </div>`
 }
 
