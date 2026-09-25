@@ -96,7 +96,7 @@ export function createBridgeHandlers(deps: TabRenderDeps) {
       const markdown = await extractMarkdown()
       // Le design system est un bonus : une page qui refuse le scan doit
       // quand même rendre son contenu plutôt que de faire échouer l'appel.
-      let designSystem: DesignSystem | null = null
+      let designSystem: DesignSystem | null
       try {
         designSystem = await scanDesignSystem()
       } catch {
