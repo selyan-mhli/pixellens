@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0c0c0e;
+        --surface: #161618;
+        --surface-raised: #1b1b1f;
+        --border: #2a2a30;
+        --text: #ededef;
+        --muted: #9797a1;
+        --accent: #6366f1;
+        --accent-soft: #818cf8;
+        --success: #65c78c;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.026) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.026) 1px, transparent 1px);
+        background-size: 48px 48px;
+        pointer-events: none;
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg);
+      }
+
+      .clip {
+        position: absolute;
+        inset: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        overflow: hidden;
+        background: var(--bg);
+      }
+
+      .frame {
+        width: 100%;
+        height: 100%;
+        padding: 76px 92px;
+        position: relative;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 54px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .brand img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .proof-badge,
+      .eyebrow,
+      .stat,
+      .free-badge {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--muted);
+      }
+
+      .proof-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        height: 42px;
+        padding: 0 16px;
+        border-radius: 999px;
+        font-size: 17px;
+        font-weight: 600;
+      }
+
+      .proof-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 5px rgba(101, 199, 140, 0.12);
+      }
+
+      h1,
+      h2 {
+        letter-spacing: -0.048em;
+        line-height: 0.98;
+      }
+
+      h1 {
+        max-width: 1320px;
+        font-size: 116px;
+        font-weight: 720;
+      }
+
+      h1 .accent,
+      h2 .accent {
+        color: var(--accent-soft);
+      }
+
+      h2 {
+        font-size: 78px;
+        font-weight: 700;
+      }
+
+      .lead {
+        max-width: 960px;
+        color: var(--muted);
+        font-size: 32px;
+        line-height: 1.45;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .scene-one .hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 34px;
+        height: calc(100% - 54px);
+      }
+
+      .scene-one .arrow {
+        position: absolute;
+        right: 118px;
+        bottom: 102px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        color: var(--muted);
+        font-size: 20px;
+      }
+
+      .arrow-line {
+        width: 116px;
+        height: 2px;
+        background: var(--accent);
+        position: relative;
+      }
+
+      .arrow-line::after {
+        content: "";
+        position: absolute;
+        top: -6px;
+        right: 0;
+        width: 12px;
+        height: 12px;
+        border-top: 2px solid var(--accent);
+        border-right: 2px solid var(--accent);
+        transform: rotate(45deg);
+      }
+
+      .demo-layout {
+        display: grid;
+        grid-template-columns: 1.12fr 0.88fr;
+        gap: 34px;
+        height: calc(100% - 86px);
+        padding-top: 34px;
+      }
+
+      .browser-card,
+      .action-card,
+      .code-card,
+      .cta-card {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: 24px;
+        overflow: hidden;
+      }
+
+      .browser-card {
+        position: relative;
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+      }
+
+      .browser-chrome {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        height: 64px;
+        padding: 0 22px;
+        border-bottom: 1px solid var(--border);
+        background: #202024;
+      }
+
+      .traffic {
+        display: flex;
+        gap: 8px;
+      }
+
+      .traffic i {
+        display: block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .traffic i:nth-child(1) { background: #ff625a; }
+      .traffic i:nth-child(2) { background: #ffbd2e; }
+      .traffic i:nth-child(3) { background: #28c840; }
+
+      .address {
+        display: flex;
+        align-items: center;
+        height: 38px;
+        flex: 1;
+        padding: 0 16px;
+        border-radius: 9px;
+        background: #151518;
+        color: #b4b4bc;
+        font-size: 16px;
+      }
+
+      .browser-viewport {
+        position: relative;
+        height: calc(100% - 64px);
+        overflow: hidden;
+        background: #f8f7f4;
+      }
+
+      .browser-viewport img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: left top;
+        filter: saturate(0.82);
+        clip-path: inset(0 0 24% 0);
+      }
+
+      .source-label {
+        position: absolute;
+        left: 22px;
+        bottom: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        background: rgba(12, 12, 14, 0.88);
+        color: #d7d7dd;
+        font-size: 15px;
+        backdrop-filter: blur(10px);
+      }
+
+      .action-column {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 28px;
+      }
+
+      .action-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+
+      .action-copy h2 {
+        font-size: 64px;
+      }
+
+      .action-copy p {
+        color: var(--muted);
+        font-size: 25px;
+        line-height: 1.5;
+      }
+
+      .action-card {
+        padding: 28px;
+      }
+
+      .action-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
+        height: 78px;
+        border: 1px solid var(--accent);
+        border-radius: 14px;
+        background: var(--accent);
+        color: white;
+        font-size: 23px;
+        font-weight: 700;
+      }
+
+      .action-button .check {
+        display: none;
+      }
+
+      .privacy-note {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 17px;
+      }
+
+      .lock {
+        width: 19px;
+        height: 16px;
+        border: 2px solid var(--muted);
+        border-radius: 4px;
+        position: relative;
+      }
+
+      .lock::before {
+        content: "";
+        position: absolute;
+        width: 9px;
+        height: 8px;
+        left: 3px;
+        top: -9px;
+        border: 2px solid var(--muted);
+        border-bottom: 0;
+        border-radius: 7px 7px 0 0;
+      }
+
+      .result-layout {
+        display: grid;
+        grid-template-columns: 0.72fr 1.28fr;
+        gap: 42px;
+        height: calc(100% - 88px);
+        padding-top: 34px;
+      }
+
+      .result-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 28px;
+      }
+
+      .result-copy .lead {
+        font-size: 27px;
+      }
+
+      .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .stat {
+        padding: 11px 15px;
+        border-radius: 999px;
+        font-size: 17px;
+        font-weight: 650;
+      }
+
+      .code-card {
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+      }
+
+      .code-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 66px;
+        padding: 0 24px;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface-raised);
+        color: var(--muted);
+        font-size: 16px;
+      }
+
+      .actual-pill {
+        color: var(--success);
+        font-weight: 700;
+      }
+
+      pre {
+        flex: 1;
+        padding: 30px 34px;
+        overflow: hidden;
+        color: #d7d7df;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 20px;
+        line-height: 1.55;
+        white-space: pre-wrap;
+      }
+
+      .code-line {
+        display: block;
+      }
+
+      .key { color: #a7a9ff; }
+      .string { color: #a6d9b6; }
+      .heading { color: #f2f2f5; font-weight: 700; }
+      .bold { color: #ffffff; font-weight: 700; }
+
+      .cta-shell {
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 92px;
+      }
+
+      .cta-card {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1.16fr 0.84fr;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 84px 92px;
+        border-color: #34343d;
+      }
+
+      .cta-card::after {
+        content: "";
+        position: absolute;
+        width: 430px;
+        height: 430px;
+        right: -86px;
+        bottom: -154px;
+        border: 92px solid rgba(99, 102, 241, 0.14);
+        border-radius: 50%;
+      }
+
+      .cta-copy {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .cta-copy h2 {
+        max-width: 940px;
+        font-size: 92px;
+      }
+
+      .cta-copy .lead {
+        font-size: 28px;
+      }
+
+      .store-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        min-width: 360px;
+        height: 74px;
+        padding: 0 28px;
+        border-radius: 14px;
+        background: var(--accent);
+        color: #ffffff;
+        font-size: 22px;
+        font-weight: 750;
+      }
+
+      .free-badge {
+        display: inline-flex;
+        width: fit-content;
+        padding: 10px 14px;
+        border-radius: 999px;
+        color: var(--success);
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .logo-stage {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        place-items: center;
+      }
+
+      .logo-stage .ring {
+        position: absolute;
+        width: 460px;
+        height: 460px;
+        border: 1px solid #34343d;
+        border-radius: 50%;
+      }
+
+      .logo-stage .ring:nth-child(2) {
+        width: 340px;
+        height: 340px;
+        border-color: rgba(99, 102, 241, 0.52);
+      }
+
+      .logo-stage img {
+        width: 220px;
+        height: 220px;
+        position: relative;
+        z-index: 2;
+        filter: drop-shadow(0 26px 48px rgba(0, 0, 0, 0.45));
+      }
+
+      .footer-note {
+        position: absolute;
+        left: 92px;
+        bottom: 34px;
+        color: #85858f;
+        font-size: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="root" data-composition-id="main" data-start="0" data-duration="19" data-width="1920" data-height="1080">
+      <section id="scene-one" class="scene scene-one" data-layout-allow-overflow="true" data-layout-allow-occlusion="true">
+        <div class="frame">
+          <header class="topbar scene-one-top">
+            <div class="brand"><img src="assets/pixellens-logo-1.svg" alt="" /> PixelLens</div>
+            <div class="proof-badge"><span class="proof-dot"></span> Tested on the public Chrome extension</div>
+          </header>
+          <div class="hero">
+            <div class="eyebrow scene-one-item">Chrome extension · free workflow</div>
+            <h1 class="scene-one-item">Turn the page you’re viewing into <span class="accent">clean Markdown.</span></h1>
+            <p class="lead scene-one-item">Useful context for Claude, ChatGPT, or any tool that accepts Markdown.</p>
+          </div>
+          <div class="arrow scene-one-arrow"><span>See the real output</span><span class="arrow-line"></span></div>
+        </div>
+      </section>
+
+      <section id="scene-two" class="scene" data-layout-allow-overflow="true" data-layout-allow-occlusion="true">
+        <div class="frame">
+          <header class="topbar scene-two-top">
+            <div class="brand"><img src="assets/pixellens-logo-2.svg" alt="" /> PixelLens</div>
+            <div class="proof-badge"><span class="proof-dot"></span> Runs locally · no AI API key</div>
+          </header>
+          <div class="demo-layout">
+            <div class="browser-card scene-two-card">
+              <div class="browser-chrome">
+                <div class="traffic"><i></i><i></i><i></i></div>
+                <div class="address">lumenjournal.com/essays/eight-point-grid</div>
+              </div>
+              <div class="browser-viewport">
+                <img src="assets/page-to-markdown.png" alt="PixelLens page to Markdown interface" />
+                <div class="source-label">Example page · product interface preview</div>
+              </div>
+            </div>
+            <div class="action-column">
+              <div class="action-copy scene-two-copy">
+                <div class="eyebrow">One page</div>
+                <h2>Click <span class="accent">Copy Markdown</span></h2>
+                <p>PixelLens keeps headings, links, images, lists, and useful page metadata.</p>
+              </div>
+              <div class="action-card scene-two-action">
+                <div id="copy-button" class="action-button"><span class="copy-icon">⧉</span><span id="copy-label">Copy Markdown</span><span class="check">✓</span></div>
+                <div class="privacy-note"><span class="lock"></span> Conversion stays in your browser</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="scene-three" class="scene" data-layout-allow-overflow="true" data-layout-allow-occlusion="true">
+        <div class="frame">
+          <header class="topbar scene-three-top">
+            <div class="brand"><img src="assets/pixellens-logo-3.svg" alt="" /> PixelLens</div>
+            <div class="proof-badge"><span class="proof-dot"></span> Actual captured output</div>
+          </header>
+          <div class="result-layout">
+            <div class="result-copy">
+              <div class="eyebrow result-item">Verified result</div>
+              <h2 class="result-item">Ready to <span class="accent">paste.</span></h2>
+              <p class="lead result-item">This excerpt comes from the real Markdown copied from the live PixelLens page.</p>
+              <div class="stats result-item">
+                <span class="stat">388 words</span><span class="stat">YAML frontmatter</span><span class="stat">Headings</span><span class="stat">Links + images</span>
+              </div>
+            </div>
+            <div class="code-card result-card">
+              <div class="code-head"><span>parcours-gratuit-sortie.md</span><span class="actual-pill">● Public v1.1.0 test</span></div>
+              <pre><code><span class="code-line">---</span><span class="code-line"><span class="key">title:</span> <span class="string">"PixelLens : page web → Markdown pour votre IA"</span></span><span class="code-line"><span class="key">url:</span> <span class="string">"https://akselai.fr/outils/pixellens"</span></span><span class="code-line"><span class="key">wordCount:</span> 388</span><span class="code-line">---</span><span class="code-line"> </span><span class="code-line heading"># PixelLens</span><span class="code-line"> </span><span class="code-line">Donnez à votre IA de vraies pages, pas des captures d'écran.</span><span class="code-line">PixelLens transforme n'importe quelle page web en Markdown propre.</span><span class="code-line">Tout tourne <span class="bold">localement dans votre navigateur</span>.</span><span class="code-line"> </span><span class="code-line heading">## Ce que ça fait.</span><span class="code-line heading">### Page → Markdown</span><span class="code-line">La page courante convertie en Markdown GFM propre,</span><span class="code-line">frontmatter compris. Copie ou fichier .md.</span></code></pre>
+            </div>
+          </div>
+          <div class="footer-note" data-layout-allow-overflow="true">Capture effectuée le 19 septembre 2026 sur la version publique du Chrome Web Store.</div>
+        </div>
+      </section>
+
+      <section id="scene-four" class="scene" data-layout-allow-overflow="true" data-layout-allow-occlusion="true">
+        <div class="cta-shell">
+          <div class="cta-card">
+            <div class="cta-copy">
+              <div class="free-badge cta-item">Free page-to-Markdown workflow</div>
+              <h2 class="cta-item">Try PixelLens on <span class="accent">Chrome.</span></h2>
+              <p class="lead cta-item">Then tell me which page structures still need better cleanup.</p>
+              <div class="store-button cta-item">Available on the Chrome Web Store</div>
+            </div>
+            <div class="logo-stage">
+              <div class="ring ring-one"></div><div class="ring ring-two"></div>
+              <img class="final-logo" src="assets/pixellens-logo-4.svg" alt="PixelLens" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+      tl.set(["#scene-two", "#scene-three", "#scene-four"], { xPercent: 100 });
+      tl.from(".scene-one-top", { opacity: 0, y: -18, duration: 0.55 }, 0.05);
+      tl.from(".scene-one-item", { opacity: 0, y: 34, duration: 0.72, stagger: 0.12 }, 0.26);
+      tl.from(".scene-one-arrow", { opacity: 0, x: -28, duration: 0.6 }, 1.18);
+
+      tl.to("#scene-one", { xPercent: -34, opacity: 0, duration: 0.74, ease: "power2.inOut" }, 3.55);
+      tl.to("#scene-two", { xPercent: 0, duration: 0.74, ease: "power2.inOut" }, 3.55);
+      tl.from(".scene-two-top", { opacity: 0, y: -18, duration: 0.48 }, 4.05);
+      tl.from(".scene-two-card", { opacity: 0, y: 28, scale: 0.985, duration: 0.62 }, 4.08);
+      tl.from(".scene-two-copy", { opacity: 0, x: 28, duration: 0.62 }, 4.28);
+      tl.from(".scene-two-action", { opacity: 0, y: 24, duration: 0.55 }, 4.62);
+      tl.to("#copy-button", { scale: 0.975, duration: 0.12, ease: "power2.in" }, 6.55);
+      tl.to("#copy-button", { scale: 1, backgroundColor: "#2f7d50", borderColor: "#65c78c", duration: 0.28 }, 6.67);
+      tl.set("#copy-label", { textContent: "Copied" }, 6.7);
+      tl.set(".copy-icon", { display: "none" }, 6.7);
+      tl.set(".check", { display: "inline" }, 6.7);
+
+      tl.to("#scene-two", { xPercent: -34, opacity: 0, duration: 0.74, ease: "power2.inOut" }, 8.15);
+      tl.to("#scene-three", { xPercent: 0, duration: 0.74, ease: "power2.inOut" }, 8.15);
+      tl.from(".scene-three-top", { opacity: 0, y: -18, duration: 0.48 }, 8.62);
+      tl.from(".result-item", { opacity: 0, y: 28, duration: 0.6, stagger: 0.1 }, 8.74);
+      tl.from(".result-card", { opacity: 0, x: 42, duration: 0.7 }, 8.9);
+      tl.from(".code-line", { opacity: 0, y: 8, duration: 0.22, stagger: 0.055 }, 9.24);
+
+      tl.to("#scene-three", { xPercent: -34, opacity: 0, duration: 0.74, ease: "power2.inOut" }, 14.05);
+      tl.to("#scene-four", { xPercent: 0, duration: 0.74, ease: "power2.inOut" }, 14.05);
+      tl.from(".cta-card", { opacity: 0, scale: 0.975, duration: 0.65 }, 14.48);
+      tl.from(".cta-item", { opacity: 0, y: 30, duration: 0.62, stagger: 0.11 }, 14.65);
+      tl.from(".logo-stage .ring", { opacity: 0, scale: 0.72, duration: 0.72, stagger: 0.12 }, 14.9);
+      tl.from(".final-logo", { opacity: 0, scale: 0.7, rotate: -8, duration: 0.78, ease: "back.out(1.35)" }, 15.05);
+      tl.to("#scene-four", { opacity: 0, duration: 0.42, ease: "power2.in" }, 18.5);
+
+      window.__timelines.main = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

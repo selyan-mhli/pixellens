@@ -20,4 +20,7 @@ Ship the extracted design system as CSS variables, a Tailwind config, JSON token
 ■ PRIVACY, FOR REAL
 No analytics, no telemetry, no account, no remote server. The only service PixelLens ever talks to is ExtensionPay (extensionpay.com), and only when you buy, restore or verify the optional Pro upgrade. Site crawling happens from your own browser, on the site you chose, with your own session.
 
-Free forever for inspecting, scanning, contrast checking and single-page Markdown. Pro is a one-time 19 € in-app purchase (Stripe via ExtensionPay): lifetime, no subscription, no license key to manage.
+■ LOCAL AI BRIDGE (Pro, off by default)
+Run the companion server on your own machine (npx pixellens-mcp) and your assistant can ask for the page you are on, or open a URL in your browser and read it back, without you copying anything. Unlike hosted page readers, which fetch URLs from their own servers, this reads from your browser and your session: pages behind a login and JavaScript-heavy apps work. The bridge only ever talks to 127.0.0.1, is off until you turn it on, and asks for the localhost permission only at that moment.
+
+Free forever for inspecting, scanning, contrast checking, token estimation and single-page Markdown. Pro is a one-time 19 € in-app purchase (Stripe via ExtensionPay): lifetime, no subscription, no license key to manage.

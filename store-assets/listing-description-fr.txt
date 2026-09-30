@@ -20,4 +20,7 @@ Emportez le design system en variables CSS, config Tailwind, tokens JSON (compat
 ■ CONFIDENTIALITÉ, POUR DE VRAI
 Aucun analytics, aucune télémétrie, aucun compte, aucun serveur distant. Le seul service que PixelLens contacte est ExtensionPay (extensionpay.com), et uniquement quand vous achetez, restaurez ou vérifiez l'option Pro. Le crawl s'effectue depuis votre propre navigateur, sur le site que vous avez choisi, avec votre propre session.
 
-Gratuit à vie pour l'inspection, le scan, le contraste et le Markdown d'une page. Pro : achat intégré unique de 19 € (Stripe via ExtensionPay), à vie, sans abonnement, sans clé de licence à gérer.
+■ PONT LOCAL POUR ASSISTANTS (Pro, éteint par défaut)
+Lancez le serveur compagnon sur votre machine (npx pixellens-mcp) et votre assistant peut réclamer la page que vous avez sous les yeux, ou ouvrir une URL dans votre navigateur et la lire, sans que vous copiiez quoi que ce soit. Les lecteurs de pages hébergés récupèrent l'URL depuis leurs serveurs : ils ne voient rien derrière une connexion. Ici c'est votre navigateur qui lit, avec votre session. Le pont ne parle qu'à 127.0.0.1, reste éteint tant que vous ne l'allumez pas, et ne demande la permission localhost qu'à ce moment-là.
+
+Gratuit à vie pour l'inspection, le scan, le contraste, l'estimation du nombre de tokens et le Markdown d'une page. Pro : achat intégré unique de 19 € (Stripe via ExtensionPay), à vie, sans abonnement, sans clé de licence à gérer.
