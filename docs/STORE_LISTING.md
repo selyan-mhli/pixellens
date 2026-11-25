@@ -1,6 +1,6 @@
 # PixelLens — Fiche Chrome Web Store
 
-> Texte exact à coller dans le dashboard CWS. Dérivé du code réel (v1.2.0).
+> Texte exact à coller dans le dashboard CWS. Dérivé du code réel (v1.3.0).
 > Les justifications de permissions décrivent ce que le code fait, fichier à l'appui.
 
 ## Nom
@@ -12,7 +12,7 @@
 ## Description courte (≤ 132 caractères)
 
 ```
-Turn any web page into clean Markdown for AI, and extract its full design system: colors, type, spacing, tokens. Local, no API key.
+Turn any web page into clean Markdown for AI and extract its design system. Free, open source, local, no API key.
 ```
 
 ## Catégorie
@@ -42,7 +42,7 @@ Convert the current page into clean GFM Markdown with YAML frontmatter
 (title, URL, capture date, word count): copy it or download the .md file.
 Headings, links, images, tables and code blocks are preserved.
 
-■ CRAWL A WHOLE SITE (free: 3 pages · Pro: up to 100)
+■ CRAWL A WHOLE SITE (free, up to 100 pages)
 One click crawls every same-site page (sitemap-first, falling back to link
 crawling) and concatenates them into a single Markdown document with a table
 of contents, ready to paste into an AI's context window. Two render modes:
@@ -50,7 +50,7 @@ Fast (server HTML) or Full (each page rendered in a real background tab, so
 JavaScript-heavy SPAs convert too). Download as one .md or a multi-file ZIP.
 Respects robots.txt by default.
 
-■ COPY FOR LLM (Pro)
+■ COPY FOR LLM (free)
 One button copies a single self-describing bundle: the page as Markdown + the
 extracted design system + page metadata. Paste it into Claude, ChatGPT or any
 assistant and it understands the page end to end.
@@ -61,18 +61,17 @@ spacing scale, shadows and border radii. Check WCAG contrast ratios. Inspect
 any element: box model, computed CSS, one-click copy of any value. Grid
 overlay and distance measurement included.
 
-■ EXPORT YOUR TOKENS (Pro)
+■ EXPORT YOUR TOKENS (free)
 Ship the extracted design system as CSS variables, a Tailwind config, JSON
 tokens (Style Dictionary compatible) or a PNG palette. Rename and prune
 tokens before exporting. Keep your full scan history.
 
 ■ PRIVACY, FOR REAL
-No analytics, no telemetry, no account, no remote server. The only service
-PixelLens ever talks to is ExtensionPay (extensionpay.com), and only when you
-buy, restore or verify the optional Pro upgrade. Site crawling happens from
+No analytics, no telemetry, no account, no remote server. PixelLens talks to
+no third-party service at all. Site crawling happens from
 your own browser, on the site you chose, with your own session.
 
-■ LOCAL AI BRIDGE (Pro, off by default)
+■ LOCAL AI BRIDGE (free, off by default)
 Run the companion server on your own machine (npx pixellens-mcp) and your
 assistant can ask for the page you are on, or open a URL in your browser and
 read it back, without you copying anything. Unlike hosted page readers, which
@@ -81,9 +80,9 @@ session: pages behind a login and JavaScript-heavy apps work. The bridge only
 ever talks to 127.0.0.1, is off until you turn it on, and asks for the
 localhost permission only at that moment.
 
-Free forever for inspecting, scanning, contrast checking, token estimation and
-single-page Markdown. Pro is a one-time 19 € in-app purchase (Stripe via
-ExtensionPay): lifetime, no subscription, no license key to manage.
+100% free and open source (MIT): every feature, no paid tier, no in-app
+purchase, no license key. Source code: https://github.com/selyan-mhli/pixellens
+Made by Adam Hnaien (https://adamhnaien.fr).
 ```
 
 ## Description longue — FR
@@ -102,7 +101,7 @@ Convertissez la page courante en Markdown GFM propre avec frontmatter YAML
 (titre, URL, date de capture, nombre de mots) : copiez-le ou téléchargez le
 fichier .md. Titres, liens, images, tableaux et blocs de code sont préservés.
 
-■ CRAWLEZ UN SITE ENTIER (gratuit : 3 pages · Pro : jusqu'à 100)
+■ CRAWLEZ UN SITE ENTIER (gratuit, jusqu'à 100 pages)
 Un clic parcourt toutes les pages du site (sitemap d'abord, puis suivi de
 liens) et les concatène en un seul document Markdown avec table des
 matières, prêt à coller dans le contexte d'une IA. Deux modes de rendu :
@@ -110,7 +109,7 @@ Fast (HTML serveur) ou Full (chaque page rendue dans un vrai onglet en
 arrière-plan, pour convertir aussi les SPA). Téléchargement en un .md unique
 ou en ZIP multi-fichiers. Respecte robots.txt par défaut.
 
-■ COPY FOR LLM (Pro)
+■ COPY FOR LLM (gratuit)
 Un bouton copie un bundle unique et auto-descriptif : la page en Markdown +
 le design system extrait + les métadonnées. Collez-le dans Claude, ChatGPT ou
 n'importe quel assistant : il comprend la page de bout en bout.
@@ -121,19 +120,18 @@ Scannez une page et obtenez sa palette (clusterisée et auto-classée), son
 contrastes WCAG. Inspectez chaque élément : box model, CSS calculé, copie en
 un clic. Grille et mesure de distances incluses.
 
-■ EXPORTEZ VOS TOKENS (Pro)
+■ EXPORTEZ VOS TOKENS (gratuit)
 Emportez le design system en variables CSS, config Tailwind, tokens JSON
 (compatibles Style Dictionary) ou palette PNG. Renommez et nettoyez les
 tokens avant export. Gardez tout votre historique de scans.
 
 ■ CONFIDENTIALITÉ, POUR DE VRAI
-Aucun analytics, aucune télémétrie, aucun compte, aucun serveur distant. Le
-seul service que PixelLens contacte est ExtensionPay (extensionpay.com), et
-uniquement quand vous achetez, restaurez ou vérifiez l'option Pro. Le crawl
+Aucun analytics, aucune télémétrie, aucun compte, aucun serveur distant.
+PixelLens ne contacte aucun service tiers. Le crawl
 s'effectue depuis votre propre navigateur, sur le site que vous avez choisi,
 avec votre propre session.
 
-■ PONT LOCAL POUR ASSISTANTS (Pro, éteint par défaut)
+■ PONT LOCAL POUR ASSISTANTS (gratuit, éteint par défaut)
 Lancez le serveur compagnon sur votre machine (npx pixellens-mcp) et votre
 assistant peut réclamer la page que vous avez sous les yeux, ou ouvrir une URL
 dans votre navigateur et la lire, sans que vous copiiez quoi que ce soit. Les
@@ -142,9 +140,10 @@ voient rien derrière une connexion. Ici c'est votre navigateur qui lit, avec
 votre session. Le pont ne parle qu'à 127.0.0.1, reste éteint tant que vous ne
 l'allumez pas, et ne demande la permission localhost qu'à ce moment-là.
 
-Gratuit à vie pour l'inspection, le scan, le contraste, l'estimation du nombre
-de tokens et le Markdown d'une page. Pro : achat intégré unique de 19 €
-(Stripe via ExtensionPay), à vie, sans abonnement, sans clé de licence à gérer.
+100 % gratuit et open source (MIT) : toutes les fonctionnalités, aucun palier
+payant, aucun achat intégré, aucune clé de licence. Code source :
+https://github.com/selyan-mhli/pixellens
+Créé par Adam Hnaien (https://adamhnaien.fr).
 ```
 
 ## Justifications des permissions
@@ -192,13 +191,9 @@ l'utilisateur active l'inspection ou sélectionne un élément.
 `chrome.storage.local` conserve : l'historique des design systems scannés
 (20 max, `pixellens_scans`), l'état durable de l'interface du panneau
 (`pixellens_panel_state` : vue active, format de couleur, dernier Markdown) et
-le statut Pro mis en cache (`pixellens:license` : tier, email du compte de
-paiement le cas échéant, date de dernière vérification — ce cache permet à un
-utilisateur Pro de le rester hors ligne). `chrome.storage.sync` conserve les
-préférences d'affichage (`pixellens_preferences`) et le cache technique de la
-bibliothèque ExtensionPay (`extensionpay_user`, `extensionpay_installed_at`).
-Aucune de ces données ne quitte le navigateur en dehors des échanges de
-paiement décrits ci-dessous.
+les réglages du pont local. `chrome.storage.sync` conserve les préférences
+d'affichage (`pixellens_preferences`). Aucune de ces données ne quitte le
+navigateur.
 
 ### `clipboardWrite`
 
@@ -227,21 +222,9 @@ par le serveur de l'utilisateur, et le serveur refuse au handshake toute
 connexion dont l'origine n'est pas `chrome-extension://`.
 
 L'ensemble est éteint par défaut : `DEFAULT_BRIDGE_SETTINGS.enabled === false`
-(`src/lib/mcp-bridge.ts`), et le service worker vérifie en plus la licence avant
-d'ouvrir quoi que ce soit (`bridgeAllowed`, `src/background/mcp-wiring.ts`).
-
-### Content script sur `https://extensionpay.com/*`
-
-Second content script du manifest (`src/content/extpay-relay.ts`), limité au
-seul domaine extensionpay.com : c'est le relais officiel de la bibliothèque
-ExtensionPay qui permet à la page de paiement/restauration d'informer
-l'extension qu'un paiement a abouti (déblocage Pro instantané). Il ne tourne
-sur aucun autre site et ne lit rien d'autre. Les échanges réseau avec
-`extensionpay.com` (statut de paiement) ne se produisent que lorsque
-l'utilisateur achète, restaure ou vérifie l'option Pro — puis au plus une fois
-tous les 30 jours pour un utilisateur Pro ; leur échec ne retire jamais de
-fonctionnalités (fail-open). Aucune host permission supplémentaire n'est
-requise. Aucun analytics, aucun autre endpoint.
+(`src/lib/mcp-bridge.ts`), et le service worker n'ouvre rien tant que le pont
+n'est pas activé et qu'un jeton n'existe pas (`bridgeAllowed`,
+`src/background/mcp-wiring.ts`).
 
 ### Content scripts sur `<all_urls>`
 

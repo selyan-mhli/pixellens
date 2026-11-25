@@ -5,22 +5,23 @@ PixelLens turns any web page (or an entire site) into clean, structured Markdown
 ■ PAGE → MARKDOWN (free)
 Convert the current page into clean GFM Markdown with YAML frontmatter (title, URL, capture date, word count): copy it or download the .md file. Headings, links, images, tables and code blocks are preserved.
 
-■ CRAWL A WHOLE SITE (free: 3 pages · Pro: up to 100)
+■ CRAWL A WHOLE SITE (free, up to 100 pages)
 One click crawls every same-site page (sitemap-first, falling back to link crawling) and concatenates them into a single Markdown document with a table of contents, ready to paste into an AI's context window. Two render modes: Fast (server HTML) or Full (each page rendered in a real background tab, so JavaScript-heavy SPAs convert too). Download as one .md or a multi-file ZIP. Respects robots.txt by default.
 
-■ COPY FOR LLM (Pro)
+■ COPY FOR LLM (free)
 One button copies a single self-describing bundle: the page as Markdown + the extracted design system + page metadata. Paste it into Claude, ChatGPT or any assistant and it understands the page end to end.
 
 ■ DESIGN SYSTEM EXTRACTOR (free)
 Scan any page and get its palette (clustered and auto-classified), type scale, spacing scale, shadows and border radii. Check WCAG contrast ratios. Inspect any element: box model, computed CSS, one-click copy of any value. Grid overlay and distance measurement included.
 
-■ EXPORT YOUR TOKENS (Pro)
+■ EXPORT YOUR TOKENS (free)
 Ship the extracted design system as CSS variables, a Tailwind config, JSON tokens (Style Dictionary compatible) or a PNG palette. Rename and prune tokens before exporting. Keep your full scan history.
 
 ■ PRIVACY, FOR REAL
-No analytics, no telemetry, no account, no remote server. The only service PixelLens ever talks to is ExtensionPay (extensionpay.com), and only when you buy, restore or verify the optional Pro upgrade. Site crawling happens from your own browser, on the site you chose, with your own session.
+No analytics, no telemetry, no account, no remote server. PixelLens talks to no third-party service at all. Site crawling happens from your own browser, on the site you chose, with your own session.
 
-■ LOCAL AI BRIDGE (Pro, off by default)
+■ LOCAL AI BRIDGE (free, off by default)
 Run the companion server on your own machine (npx pixellens-mcp) and your assistant can ask for the page you are on, or open a URL in your browser and read it back, without you copying anything. Unlike hosted page readers, which fetch URLs from their own servers, this reads from your browser and your session: pages behind a login and JavaScript-heavy apps work. The bridge only ever talks to 127.0.0.1, is off until you turn it on, and asks for the localhost permission only at that moment.
 
-Free forever for inspecting, scanning, contrast checking, token estimation and single-page Markdown. Pro is a one-time 19 € in-app purchase (Stripe via ExtensionPay): lifetime, no subscription, no license key to manage.
+100% free and open source (MIT): every feature, no paid tier, no in-app purchase, no license key. Source code: https://github.com/selyan-mhli/pixellens
+Made by Adam Hnaien (https://adamhnaien.fr).

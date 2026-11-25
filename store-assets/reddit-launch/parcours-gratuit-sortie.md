@@ -18,7 +18,7 @@ Outil · Extension Chrome
 
 Donnez à votre IA de vraies pages, pas des captures d'écran. PixelLens transforme n'importe quelle page web (ou un site entier) en Markdown propre, et extrait au passage son design system complet. Tout tourne **localement dans votre navigateur** : aucun serveur, aucun compte, aucune clé API.
 
-[Ajouter à Chrome](https://chromewebstore.google.com/detail/pixellens/mdjbknfjgpehbcdohjejobngijmhnfmm) Gratuit · Pro en achat unique de 19 €, à vie
+[Ajouter à Chrome](https://chromewebstore.google.com/detail/pixellens/mdjbknfjgpehbcdohjejobngijmhnfmm) 100 % gratuit et open source (MIT) · [Code source](https://github.com/selyan-mhli/pixellens)
 
 ![PixelLens convertit un article en Markdown avec le bouton Copy for LLM](https://akselai.fr/_next/image?url=%2Fprojects%2Fpixellens-panel.png&w=3840&q=75)
 
@@ -34,13 +34,13 @@ La page courante convertie en Markdown GFM propre, frontmatter compris. Copie ou
 
 ### Crawl de site entier
 
-Pro
+Gratuit
 
 Toutes les pages du site concaténées en un seul document avec table des matières. Sitemap d'abord, SPA gérées.
 
 ### Copy for LLM
 
-Pro
+Gratuit
 
 Un bouton, un bundle : contenu + design system + métadonnées, prêt à coller dans Claude ou ChatGPT.
 
@@ -58,26 +58,25 @@ Box model au survol, CSS calculé copiable en un clic, vérificateur de contrast
 
 ### Exports de tokens
 
-Pro
+Gratuit
 
 CSS variables, config Tailwind, JSON (Style Dictionary), palette PNG. Tokens renommables avant export.
 
-## Gratuit, et Pro à 19 € une fois.
+## Gratuit et open source.
 
-La règle est simple : _ce qui regarde est gratuit, ce qui emporte est Pro._ Le Pro est un achat unique dans l'extension (paiement Stripe), sans abonnement ni clé de licence à gérer.
+Toutes les fonctionnalités sont gratuites : pas de palier payant, pas d'achat intégré, pas de clé de licence. Le code est publié sous licence MIT sur [GitHub](https://github.com/selyan-mhli/pixellens). Auteur : [Adam Hnaien](https://adamhnaien.fr).
 
 -   Inspection, scan, contraste, mesures Gratuit
 -   Page courante → Markdown (copie + .md) Gratuit
 -   Design system consultable Gratuit
--   Crawl de site (3 pages en gratuit) Gratuit
--   Crawl complet (jusqu'à 100 pages) Pro
--   Copy for LLM (bundle IA) Pro
--   Exports CSS / Tailwind / JSON / PNG Pro
--   Édition des tokens + historique complet Pro
+-   Crawl de site (jusqu'à 100 pages) Gratuit
+-   Copy for LLM (bundle IA) Gratuit
+-   Exports CSS / Tailwind / JSON / PNG Gratuit
+-   Édition des tokens + historique complet Gratuit
 
 ## Vos données ne quittent pas votre navigateur.
 
-Aucun analytics, aucune télémétrie, aucun compte. Les seuls échanges réseau de l'extension concernent l'achat Pro (Stripe via ExtensionPay), et uniquement si vous l'utilisez.
+Aucun analytics, aucune télémétrie, aucun compte. L'extension ne contacte aucun service tiers.
 
 [Lire la politique de confidentialité](https://akselai.fr/outils/pixellens/confidentialite)
 

@@ -1,10 +1,10 @@
-# Brouillon Reddit : lancement de la version gratuite
+# Brouillon Reddit : lancement (gratuit et open source)
 
-Statut : relu et durci le 2026-09-30, non publié. Parcours gratuit vérifié sur la version publique 1.1.0.
+Statut : relu le 2026-09-30, mis à jour le 2026-11-25 pour la 1.3.0 (gratuite, open source), non publié.
 Vidéo à joindre : `video/pixellens-reddit-demo.mp4` (19 s, 1920 × 1080, H.264).
 
-Règle d'écriture : n'annoncer que ce que la version **publique** 1.1.0 fait déjà. Ne pas annoncer le pont MCP,
-le compteur de tokens ni les chiffres de crawl de la 1.2.0 avant l'approbation Google.
+Règle d'écriture : n'annoncer que ce que la version **publique** fait déjà. Publier ce post seulement après
+l'approbation Google de la 1.3.0, et ne pas annoncer le pont MCP tant que sa disponibilité publique n'est pas confirmée.
 
 ## Title (r/chrome_extensions, flair « Self Promotion »)
 
@@ -14,7 +14,7 @@ I got tired of pasting messy web pages into ChatGPT, so I built a free extension
 
 Copy-pasting a web page into an AI assistant usually gives you nav menus, cookie banners and broken tables. I built PixelLens to fix that for myself.
 
-What the free version does:
+What it does:
 
 - Converts the page you're on into clean Markdown: headings, links, images, tables and code blocks are kept
 - Adds a small YAML header (title, URL, capture date, word count) so the AI knows where the text comes from
@@ -23,7 +23,7 @@ What the free version does:
 
 Everything runs in your browser. No account, no API key, no analytics, no server of mine in the loop.
 
-There's an optional Pro upgrade (€19 once, no subscription) for design-token exports, a combined content + design-system bundle and bigger site crawls. The workflow in the video is 100% free.
+It's 100% free and open source (MIT): design-token exports, the combined content + design-system bundle and site crawls up to 100 pages are all included, no paid tier. Code: https://github.com/selyan-mhli/pixellens
 
 Chrome Web Store: https://chromewebstore.google.com/detail/pixellens/mdjbknfjgpehbcdohjejobngijmhnfmm
 
@@ -48,4 +48,5 @@ Built a Chrome extension that turns any web page into clean Markdown for AI, fre
 
 - Joindre `video/pixellens-reddit-demo.mp4`, dont la scène de résultat reprend le Markdown effectivement copié.
 - Le pont MCP ne fait pas partie de cette première annonce : disponibilité publique non confirmée.
+- Ne citer aucun chiffre (étoiles, installations) qui n'a pas été relevé le jour du post.
 - Règles de r/chrome_extensions consultées le 19/09/2026 : catégorie Self Promotion, spam interdit (https://www.reddit.com/r/chrome_extensions/).

@@ -1,6 +1,6 @@
 # PixelLens : plan de distribution Reddit + X
 
-> Écrit le 07/09/2026. Produit fini, publié, monétisé. Le seul problème est que
+> Écrit le 07/09/2026. Produit fini et publié. Le seul problème est que
 > personne ne le connaît.
 
 ## Baseline mesurée le 07/09/2026
@@ -10,7 +10,7 @@
 | Fiche Chrome Web Store | publiée le 09/08/2026 | `lib/jsonld.ts` (aksel-ai) |
 | Utilisateurs | **2** | page CWS publique |
 | Note | aucune | page CWS publique |
-| Prix Pro | 19 € une fois, à vie | `README.md`, ExtensionPay |
+| Modèle | gratuit, open source (MIT) depuis la 1.3.0 | https://github.com/selyan-mhli/pixellens |
 | Landing | akselai.fr/outils/pixellens (HTTP 200) | curl |
 
 Un mois en ligne, 2 utilisateurs. Ce n'est pas un problème de produit, c'est un
@@ -48,7 +48,7 @@ Conséquences sur ce plan :
 
 > Feed your AI real pages, not screenshots.
 
-Ce que ça veut dire pour l'acheteur : il colle une vraie page dans le contexte de
+Ce que ça veut dire pour l'utilisateur : il colle une vraie page dans le contexte de
 Claude ou ChatGPT au lieu d'une capture d'écran ou d'un copier-coller sale, et il
 récupère au passage le design system de la page. Tout en local, aucune clé API.
 
@@ -151,7 +151,7 @@ ses premiers avis. Un Show HN à 2 utilisateurs et zéro review se noie.
 
 ### Semaine 4 : mesure et décision
 
-- Relever les utilisateurs CWS, les ventes ExtensionPay, le trafic de la landing.
+- Relever les utilisateurs CWS, les étoiles GitHub, le trafic de la landing.
 - Décision franche : si moins de 50 installs sur le mois, le problème n'est pas
   le canal mais le pitch, et on réécrit le pitch avant de continuer. Si plus de
   50, on répète sur le sub suivant.
@@ -161,7 +161,7 @@ ses premiers avis. Un Show HN à 2 utilisateurs et zéro review se noie.
 Trois chiffres, relevés chaque lundi, rien d'autre :
 
 1. utilisateurs sur la fiche CWS (baseline : 2 le 07/09)
-2. ventes Pro (baseline : inconnue, à relever dans ExtensionPay)
+2. étoiles GitHub (baseline : à relever le jour de la bascule open source)
 3. karma Reddit (baseline : 0)
 
 Le reste (impressions X, upvotes) est du bruit tant que le premier chiffre ne
