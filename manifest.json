@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "PixelLens",
   "version": "1.3.0",
-  "description": "Turn any web page into clean Markdown for AI, and extract its full design system: colors, type, spacing, tokens. Local, no API key.",
+  "description": "Turn any web page into clean Markdown for AI and extract its design system. Free, open source, local, no API key.",
   "homepage_url": "https://akselai.fr/outils/pixellens",
   "icons": {
     "16": "icons/icon-16.png",

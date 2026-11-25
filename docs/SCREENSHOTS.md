@@ -18,7 +18,7 @@ sobre (fond `#0C0C0E`, texte blanc, 32–40 px de haut) en bas de l'image.
 - **État à obtenir** : cliquer « Convert to Markdown » ; attendre le résultat —
   header avec titre + chips (words/headings/links/images/tables/code blocks),
   aperçu Markdown rempli, bouton violet **« Copy for LLM »** bien visible en bas.
-  Compte Pro actif (aucun voile). Survoler le bouton pour son état hover.
+  Survoler le bouton pour son état hover.
 - **Légende** : `One click: the whole page as clean Markdown, ready for your AI.`
 
 ## ② Crawl en cours sur un vrai site
@@ -34,20 +34,20 @@ sobre (fond `#0C0C0E`, texte blanc, 32–40 px de haut) en bas de l'image.
 ## ③ Design system généré
 
 - **Vue** : panneau → onglet **Design System**.
-- **URL de démo** : https://stripe.com (palette et typo distinctives).
+- **URL de démo** : https://linear.app (palette et typo distinctives).
 - **État à obtenir** : scanner la page (onglet Scan → Scan page), puis ouvrir
   Design System : sections Palette (swatches + noms + hex), Type Scale,
   Spacing, Border Radius, Shadows visibles. Scroller pour cadrer Palette +
-  Type Scale à l'écran. Compte Pro actif.
+  Type Scale à l'écran.
 - **Légende** : `Scan any page. Get its palette, type scale, spacing and shadows.`
 
 ## ④ Vue Export en Tailwind
 
 - **Vue** : panneau → onglet **Export** (icône flèche).
-- **URL de démo** : même scan Stripe que la capture ③.
+- **URL de démo** : même scan Linear que la capture ③.
 - **État à obtenir** : sélectionner l'onglet **Tailwind** dans le sélecteur de
   format ; le bloc de code `theme.extend` (colors/fontFamily/spacing…) rempli et
-  net (compte Pro — pas de flou), boutons « Copy to Clipboard » et download
+  net, boutons « Copy to Clipboard » et download
   actifs en bas.
 - **Légende** : `Export your tokens: CSS variables, Tailwind config, JSON, PNG.`
 

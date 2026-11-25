@@ -5,22 +5,23 @@ PixelLens transforme n'importe quelle page web (ou un site entier) en Markdown p
 ■ PAGE → MARKDOWN (gratuit)
 Convertissez la page courante en Markdown GFM propre avec frontmatter YAML (titre, URL, date de capture, nombre de mots) : copiez-le ou téléchargez le fichier .md. Titres, liens, images, tableaux et blocs de code sont préservés.
 
-■ CRAWLEZ UN SITE ENTIER (gratuit : 3 pages · Pro : jusqu'à 100)
+■ CRAWLEZ UN SITE ENTIER (gratuit, jusqu'à 100 pages)
 Un clic parcourt toutes les pages du site (sitemap d'abord, puis suivi de liens) et les concatène en un seul document Markdown avec table des matières, prêt à coller dans le contexte d'une IA. Deux modes de rendu : Fast (HTML serveur) ou Full (chaque page rendue dans un vrai onglet en arrière-plan, pour convertir aussi les SPA). Téléchargement en un .md unique ou en ZIP multi-fichiers. Respecte robots.txt par défaut.
 
-■ COPY FOR LLM (Pro)
+■ COPY FOR LLM (gratuit)
 Un bouton copie un bundle unique et auto-descriptif : la page en Markdown + le design system extrait + les métadonnées. Collez-le dans Claude, ChatGPT ou n'importe quel assistant : il comprend la page de bout en bout.
 
 ■ EXTRACTEUR DE DESIGN SYSTEM (gratuit)
 Scannez une page et obtenez sa palette (clusterisée et auto-classée), son échelle typographique, ses spacings, ombres et border-radius. Vérifiez les contrastes WCAG. Inspectez chaque élément : box model, CSS calculé, copie en un clic. Grille et mesure de distances incluses.
 
-■ EXPORTEZ VOS TOKENS (Pro)
+■ EXPORTEZ VOS TOKENS (gratuit)
 Emportez le design system en variables CSS, config Tailwind, tokens JSON (compatibles Style Dictionary) ou palette PNG. Renommez et nettoyez les tokens avant export. Gardez tout votre historique de scans.
 
 ■ CONFIDENTIALITÉ, POUR DE VRAI
-Aucun analytics, aucune télémétrie, aucun compte, aucun serveur distant. Le seul service que PixelLens contacte est ExtensionPay (extensionpay.com), et uniquement quand vous achetez, restaurez ou vérifiez l'option Pro. Le crawl s'effectue depuis votre propre navigateur, sur le site que vous avez choisi, avec votre propre session.
+Aucun analytics, aucune télémétrie, aucun compte, aucun serveur distant. PixelLens ne contacte aucun service tiers. Le crawl s'effectue depuis votre propre navigateur, sur le site que vous avez choisi, avec votre propre session.
 
-■ PONT LOCAL POUR ASSISTANTS (Pro, éteint par défaut)
+■ PONT LOCAL POUR ASSISTANTS (gratuit, éteint par défaut)
 Lancez le serveur compagnon sur votre machine (npx pixellens-mcp) et votre assistant peut réclamer la page que vous avez sous les yeux, ou ouvrir une URL dans votre navigateur et la lire, sans que vous copiiez quoi que ce soit. Les lecteurs de pages hébergés récupèrent l'URL depuis leurs serveurs : ils ne voient rien derrière une connexion. Ici c'est votre navigateur qui lit, avec votre session. Le pont ne parle qu'à 127.0.0.1, reste éteint tant que vous ne l'allumez pas, et ne demande la permission localhost qu'à ce moment-là.
 
-Gratuit à vie pour l'inspection, le scan, le contraste, l'estimation du nombre de tokens et le Markdown d'une page. Pro : achat intégré unique de 19 € (Stripe via ExtensionPay), à vie, sans abonnement, sans clé de licence à gérer.
+100 % gratuit et open source (MIT) : toutes les fonctionnalités, aucun palier payant, aucun achat intégré, aucune clé de licence. Code source : https://github.com/selyan-mhli/pixellens
+Créé par Adam Hnaien (https://adamhnaien.fr).
