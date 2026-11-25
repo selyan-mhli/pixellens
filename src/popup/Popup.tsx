@@ -15,7 +15,6 @@ import { MessageType } from '@/types/messages'
 import { sendMessage } from '@/lib/messaging'
 import { setPanelInitialMode, getLatestDesignSystem } from '@/lib/storage'
 import { buildLlmBundle } from '@/lib/llm-bundle'
-import { readLicense } from '@/lib/license'
 import type { MarkdownResult } from '@/types/markdown'
 import PixelLensLogo from '@/sidepanel/components/PixelLensLogo'
 
@@ -40,7 +39,6 @@ export function Popup() {
   const [currentUrl, setCurrentUrl] = useState('')
   const [mdStatus, setMdStatus] = useState<MarkdownStatus>('idle')
   const [llmStatus, setLlmStatus] = useState<MarkdownStatus>('idle')
-  const [isPro, setIsPro] = useState<boolean | null>(null)
   // The active tab id, captured on mount so the click handlers can call
   // chrome.sidePanel.open({ tabId }) synchronously — no awaited query is
   // allowed before the open() or Chrome drops the user gesture.
@@ -71,20 +69,6 @@ export function Popup() {
         popup: find('_execute_action') || fallback.popup,
       })
     })
-  }, [])
-
-  useEffect(() => {
-    let cancelled = false
-    readLicense()
-      .then((license) => {
-        if (!cancelled) setIsPro(license.tier === 'pro')
-      })
-      .catch(() => {
-        if (!cancelled) setIsPro(false)
-      })
-    return () => {
-      cancelled = true
-    }
   }, [])
 
   async function handleInspect() {
@@ -150,16 +134,6 @@ export function Popup() {
 
   async function handleCopyLlm() {
     if (llmStatus === 'working') return
-    if (isPro !== true) {
-      // Le popup ne doit jamais contourner le ProGate du panneau. L'ouverture reste
-      // synchrone dans le geste utilisateur, puis la vue Markdown explique l'offre.
-      if (tabId != null) {
-        chrome.sidePanel.open({ tabId }).catch(() => {})
-      }
-      await setPanelInitialMode('markdown')
-      window.close()
-      return
-    }
     setLlmStatus('working')
     try {
       const result: MarkdownResult | undefined = await sendMessage(
@@ -236,9 +210,7 @@ export function Popup() {
           ? 'Page not supported'
           : llmStatus === 'failed'
             ? 'Copy failed'
-            : isPro === false
-              ? 'Copy for LLM · Pro'
-              : 'Copy for LLM'
+            : 'Copy for LLM'
 
   return (
     <div className="popup">

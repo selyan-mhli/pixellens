@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react'
 import { ClockCounterClockwise, Trash } from '@phosphor-icons/react'
 import { usePanelStore } from '../store'
 import { getDesignSystems } from '@/lib/storage'
-import ProGate from '../components/ProGate'
 import type { DesignSystem } from '@/types/design-system'
-
-// Historique GRATUIT : les 3 derniers scans restent ouvrables ; au-delà, les entrées
-// sont visibles (le résultat existe, dégradé) mais grisées sous le ProGate.
-const FREE_HISTORY_LIMIT = 3
 
 function timeAgo(dateStr: string): string {
   const now = Date.now()
@@ -25,7 +20,6 @@ function timeAgo(dateStr: string): string {
 function HistoryView() {
   const setDesignSystem = usePanelStore((s) => s.setDesignSystem)
   const setMode = usePanelStore((s) => s.setMode)
-  const isPro = usePanelStore((s) => s.isPro)
   const storeHistory = usePanelStore((s) => s.history)
   const clearHistory = usePanelStore((s) => s.clearHistory)
   const [history, setHistory] = useState<DesignSystem[]>([])
@@ -84,28 +78,12 @@ function HistoryView() {
     )
   }
 
-  // Gratuit : les 3 derniers scans restent ouvrables, le reste passe sous le ProGate.
-  const openable = isPro ? history : history.slice(0, FREE_HISTORY_LIMIT)
-  const locked = isPro ? [] : history.slice(FREE_HISTORY_LIMIT)
-
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2">
-        {openable.map((ds, i) => (
+        {history.map((ds, i) => (
           <HistoryRow key={i} ds={ds} onSelect={() => handleSelect(ds)} />
         ))}
-        {locked.length > 0 && (
-          <ProGate
-            title="Retrouvez tout votre historique"
-            body={`${locked.length} scan${locked.length === 1 ? '' : 's'} de plus — rouvrez n'importe quel site déjà scanné.`}
-          >
-            <div className="flex flex-col gap-2 opacity-60">
-              {locked.map((ds, i) => (
-                <HistoryRow key={i} ds={ds} disabled />
-              ))}
-            </div>
-          </ProGate>
-        )}
       </div>
 
       {/* Clear button */}

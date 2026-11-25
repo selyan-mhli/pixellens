@@ -21,13 +21,6 @@ import { MessageType } from '@/types/messages'
 import { copyToClipboard, downloadMarkdown } from '@/lib/export'
 import { downloadCrawlZip } from '@/lib/crawl-zip'
 import MarkdownPreview from '../components/MarkdownPreview'
-import { extpay } from '@/lib/extpay'
-
-// Limite du crawl GRATUIT. Appliquée ici, dans l'orchestration (payload CRAWL_SITE),
-// jamais dans lib/crawler — ce module reste pur et agnostique du business model.
-// Les 3 pages crawlées sont réellement converties ET copiables : on tient parole
-// sur la partie gratuite ; Pro déverrouille le plafond produit (100 pages).
-const FREE_MAX_PAGES = 3
 
 // Le download contient TOUT le document ; la preview est tronquée au-delà de ce seuil
 // pour ne pas faire ramer le panel (le document peut peser plusieurs Mo).
@@ -117,7 +110,6 @@ function CrawlView() {
   const setExportMode = usePanelStore((s) => s.setCrawlExportMode)
   const respectRobots = usePanelStore((s) => s.crawlRespectRobots)
   const setRespectRobots = usePanelStore((s) => s.setCrawlRespectRobots)
-  const isPro = usePanelStore((s) => s.isPro)
   const [copied, setCopied] = useState(false)
   // Render mode is LOCAL (not persisted in the store): Fast (fetch) vs Full (real tab).
   const [renderMode, setRenderMode] = useState<'fast' | 'full'>('fast')
@@ -139,9 +131,6 @@ function CrawlView() {
         startUrl: '',
         respectRobots,
         renderMode,
-        // Gratuit : le crawl s'exécute RÉELLEMENT mais s'arrête à 3 pages.
-        // Pro : plafond produit par défaut (100 pages, CRAWL_DEFAULTS).
-        ...(isPro ? {} : { maxPages: FREE_MAX_PAGES }),
       })
       if (!res?.success) {
         setRunning(false)
@@ -152,7 +141,7 @@ function CrawlView() {
       setRunning(false)
       setError('failed')
     }
-  }, [setRunning, setError, setResult, setProgress, respectRobots, renderMode, isPro])
+  }, [setRunning, setError, setResult, setProgress, respectRobots, renderMode])
 
   const handleStop = useCallback(() => {
     // Annulation coopérative : le crawl finit la page en cours puis renvoie le document
@@ -374,21 +363,6 @@ function CrawlView() {
             renders with JavaScript. Switch “Render” to <span className="font-medium">Full</span>{' '}
             below and crawl again.
           </p>
-        )}
-
-        {!isPro && stats.pageCount >= FREE_MAX_PAGES && (
-          <div className="flex items-center justify-between gap-2 mt-2 px-2 py-1.5 rounded-md bg-panel-accent/10 border border-panel-accent/30">
-            <p className="text-[10px] text-panel-text leading-relaxed">
-              First {FREE_MAX_PAGES} pages (free) — go Pro to crawl the whole site (up to
-              100 pages).
-            </p>
-            <button
-              onClick={() => extpay.openPaymentPage().catch((err) => console.error('[PixelLens]', err))}
-              className="shrink-0 px-2 py-1 rounded-md bg-panel-accent text-white text-[10px] font-medium hover:bg-panel-accent-hover transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-accent focus-visible:ring-offset-1 focus-visible:ring-offset-panel-bg"
-            >
-              Go Pro — 19 €
-            </button>
-          </div>
         )}
 
         {stats.pageCount === 0 && stats.skippedCount === 0 && (
