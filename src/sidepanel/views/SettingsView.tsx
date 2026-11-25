@@ -96,8 +96,20 @@ function SettingsView() {
             rel="noopener noreferrer"
             className="hover:text-panel-text transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-accent rounded"
           >
-            Open source · Built by Adam Hnaien
+            Open source
           </a>
+          <span aria-hidden="true">·</span>
+          <span>
+            Built with{" "}
+            <a
+              href="https://adamhnaien.fr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-panel-text transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-accent rounded"
+            >
+              Adam Hnaien
+            </a>
+          </span>
           <span className="ml-auto font-mono">v{chrome.runtime.getManifest().version}</span>
         </p>
       </div>

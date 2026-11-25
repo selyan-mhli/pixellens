@@ -169,4 +169,4 @@ MIT — voir [LICENSE](LICENSE).
 
 ## 👤 Author
 
-Built by **Adam Hnaien** — [@vgtray](https://github.com/vgtray)
+Built with [Adam Hnaien](https://adamhnaien.fr/) — [@vgtray](https://github.com/vgtray)
