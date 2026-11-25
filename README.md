@@ -49,33 +49,18 @@ Extension Chrome pour développeurs et designers : conversion de n'importe quell
 - 🎯 Floating toolbar draggable
 - ⌘K Command palette
 
-## 💎 Gratuit vs Pro
+## 💚 Gratuit et open source
 
-Pro : **19 € une fois, à vie** — achat intégré via ExtensionPay (paiement Stripe),
-aucune clé à saisir : on clique « Passer en Pro », on paye, c'est débloqué.
-Règle produit : *ce qui regarde est gratuit, ce qui emporte est Pro.*
+PixelLens est **100 % gratuite et open source** (licence MIT). Pas de palier Pro,
+pas de paiement, pas de compte : toutes les fonctionnalités sont ouvertes à tout
+le monde, crawl complet (jusqu'à 100 pages), Copy for LLM, exports CSS / Tailwind /
+JSON / PNG et édition des tokens compris.
 
-| Fonctionnalité | Gratuit | Pro |
-|---|:--:|:--:|
-| Mode inspection (hover, box model, CSS calculé) | ✅ | ✅ |
-| Copie d'une valeur CSS individuelle | ✅ | ✅ |
-| Scan de page (couleurs, typo, spacings, ombres, radius) | ✅ | ✅ |
-| Consultation du design system généré | ✅ | ✅ |
-| Vérificateur de contraste WCAG | ✅ | ✅ |
-| Grid overlay + mesure de distances | ✅ | ✅ |
-| Page courante → Markdown (copie et téléchargement) | ✅ | ✅ |
-| Estimation du nombre de tokens du document | ✅ | ✅ |
-| Édition des tokens (renommer, supprimer) | ❌ | ✅ |
-| Exports : CSS Variables, Tailwind, JSON, palette PNG | ❌ | ✅ |
-| « Copy for LLM » (contenu + design system + métadonnées) | ❌ | ✅ |
-| Crawl de site au-delà de 3 pages (jusqu'à 100) | ❌ | ✅ |
-| Historique des scans au-delà des 3 derniers | ❌ | ✅ |
-| Pont local pour assistants (MCP) : l'IA lit vos onglets | ❌ | ✅ |
+L'extension n'émet **aucune requête réseau vers un serveur tiers** : tout est
+calculé localement dans votre navigateur. Les seules requêtes sont celles que vous
+déclenchez vers le site que vous convertissez ou crawlez.
 
-Les échanges avec `extensionpay.com` (achat / restauration / vérification du
-statut Pro) sont les **seules** requêtes réseau émises par l'extension
-elle-même — fail-open : un Pro hors ligne reste Pro.
-Politique de confidentialité : [`docs/PRIVACY_POLICY.md`](docs/PRIVACY_POLICY.md).
+Contributions bienvenues : ouvrez une issue ou une pull request.
 
 ## 🏗️ Tech Stack
 
@@ -130,8 +115,8 @@ npm run dev
 
 ```
 src/
-├── types/          # Types partagés (DesignSystem, Inspection, Messages, Crawl, License)
-├── lib/            # Utilitaires (colors, CSS parser, tokens, markdown, crawler, license, export, storage)
+├── types/          # Types partagés (DesignSystem, Inspection, Messages, Crawl)
+├── lib/            # Utilitaires (colors, CSS parser, tokens, markdown, crawler, export, storage)
 ├── background/     # Service worker (routing messages, commands, badge)
 ├── popup/          # Popup compact (quick actions)
 ├── content/        # Content scripts injectés dans les pages
@@ -180,8 +165,8 @@ npm run test:coverage  # Avec rapport de couverture
 
 ## 📄 License
 
-MIT
+MIT — voir [LICENSE](LICENSE).
 
 ## 👤 Author
 
-**Adam Hnaien** — [@vgtray](https://github.com/vgtray)
+Built by **Adam Hnaien** — [@vgtray](https://github.com/vgtray)

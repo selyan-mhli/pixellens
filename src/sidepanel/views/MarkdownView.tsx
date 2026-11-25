@@ -25,7 +25,6 @@ import { buildLlmBundle } from '@/lib/llm-bundle'
 import { estimateTokens, formatTokens } from '@/lib/tokens'
 import type { MarkdownFrontmatter, MarkdownResult } from '@/types/markdown'
 import MarkdownPreview from '../components/MarkdownPreview'
-import ProGate from '../components/ProGate'
 import StaleScanBanner from '../components/StaleScanBanner'
 import { isDifferentHost } from '@/lib/url'
 
@@ -220,9 +219,7 @@ function MarkdownView() {
 
   return (
     <div className="flex flex-col h-full">
-      {stale && (
-        <StaleScanBanner scanUrl={fm.url} onRescan={handleGenerate} action="Convert" />
-      )}
+      {stale && <StaleScanBanner scanUrl={fm.url} onRescan={handleGenerate} action="Convert" />}
       {/* Meta header — frontmatter + stats */}
       <div className="shrink-0 px-3 py-3 border-b border-panel-border">
         <div className="flex items-start justify-between gap-2">
@@ -278,25 +275,18 @@ function MarkdownView() {
 
       {/* Actions */}
       <div className="shrink-0 p-3 border-t border-panel-border flex flex-col gap-2">
-        {/* Hero action — the headline feature: one paste-ready document for an AI.
-            Seule action Pro de cette vue : la conversion Markdown de la page courante
-            (copie + téléchargement ci-dessous) reste entièrement gratuite. */}
-        <ProGate
-          title="Copiez le bundle pour votre IA"
-          body="Contenu de la page + design system + métadonnées, en un seul document prêt à coller."
+        {/* Hero action — the headline feature: one paste-ready document for an AI. */}
+        <button
+          onClick={handleCopyLlm}
+          className={`w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:ring-panel-accent focus-visible:ring-offset-2 focus-visible:ring-offset-panel-bg ${
+            copiedLlm
+              ? 'bg-success text-white'
+              : 'bg-panel-accent text-white hover:bg-panel-accent-hover'
+          }`}
         >
-          <button
-            onClick={handleCopyLlm}
-            className={`w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:ring-panel-accent focus-visible:ring-offset-2 focus-visible:ring-offset-panel-bg ${
-              copiedLlm
-                ? 'bg-success text-white'
-                : 'bg-panel-accent text-white hover:bg-panel-accent-hover'
-            }`}
-          >
-            {copiedLlm ? <Check size={14} /> : <Sparkle size={14} weight="fill" />}
-            {copiedLlm ? 'Copied for LLM!' : 'Copy for LLM'}
-          </button>
-        </ProGate>
+          {copiedLlm ? <Check size={14} /> : <Sparkle size={14} weight="fill" />}
+          {copiedLlm ? 'Copied for LLM!' : 'Copy for LLM'}
+        </button>
         <div className="flex gap-2">
           <button
             onClick={handleCopy}

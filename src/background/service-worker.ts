@@ -1,29 +1,11 @@
 // PixelLens — Background Service Worker
 
-import ExtPay from 'extpay'
 import { MessageType } from '@/types/messages'
 import type { MessagePayloadMap } from '@/types/messages'
 import type { MarkdownResult } from '@/types/markdown'
 import { saveDesignSystem } from '@/lib/storage'
 import { renderPageInTab, type TabRenderDeps } from '@/lib/tab-render'
-import { writeLicense } from '@/lib/license'
-import { EXTPAY_EXTENSION_ID } from '@/lib/constants'
 import { installBridge } from './mcp-wiring'
-
-// ExtensionPay DOIT être initialisé dans le service worker (startBackground) pour
-// que la page de paiement puisse dialoguer avec l'extension. Le listener onPaid
-// persiste le statut Pro même si le side panel est fermé au moment du paiement —
-// le panel, lui, écoute aussi onPaid pour se mettre à jour en direct (App.tsx).
-const extpay = ExtPay(EXTPAY_EXTENSION_ID)
-extpay.startBackground()
-extpay.onPaid.addListener((user) => {
-  writeLicense({
-    tier: 'pro',
-    email: user.email ?? null,
-    verifiedAt: new Date().toISOString(),
-    lastError: null,
-  }).catch((err) => console.debug('[PixelLens]', (err as Error).message))
-})
 
 // Prevent side panel from opening on action click (we control it manually)
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false })

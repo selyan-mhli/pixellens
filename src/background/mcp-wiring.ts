@@ -7,7 +7,6 @@ import { MessageType } from '@/types/messages'
 import type { MarkdownResult } from '@/types/markdown'
 import type { DesignSystem } from '@/types/design-system'
 import { buildLlmBundle } from '@/lib/llm-bundle'
-import { readLicense } from '@/lib/license'
 import { renderPageInTab, type TabRenderDeps } from '@/lib/tab-render'
 import {
   McpBridgeClient,
@@ -112,18 +111,9 @@ export async function readBridgeSettings(): Promise<BridgeSettings> {
   return { ...DEFAULT_BRIDGE_SETTINGS, ...(stored[BRIDGE_SETTINGS_KEY] ?? {}) }
 }
 
-/**
- * Le pont est une fonctionnalité Pro, et le contrôle vit ICI, dans le service
- * worker, pas seulement dans l'interface : une case cochée à la main dans le
- * stockage ne doit pas suffire à ouvrir le pont.
- *
- * Lecture locale uniquement, jamais d'appel réseau : un Pro hors ligne reste
- * Pro, comme partout ailleurs dans l'extension.
- */
-async function bridgeAllowed(settings: BridgeSettings): Promise<boolean> {
-  if (!settings.enabled || !settings.token) return false
-  const license = await readLicense()
-  return license.tier === 'pro'
+/** Le pont ne démarre que s'il est activé dans les réglages et qu'un jeton existe. */
+function bridgeAllowed(settings: BridgeSettings): boolean {
+  return Boolean(settings.enabled && settings.token)
 }
 
 /**
@@ -149,7 +139,7 @@ export function installBridge(deps: TabRenderDeps): McpBridgeClient | null {
     const sync = () =>
       readBridgeSettings()
         .then(async (settings) => {
-          if (await bridgeAllowed(settings)) {
+          if (bridgeAllowed(settings)) {
             client.start(settings)
           } else {
             client.stop()
@@ -162,11 +152,10 @@ export function installBridge(deps: TabRenderDeps): McpBridgeClient | null {
 
     void sync()
 
-    // Les réglages ET la licence peuvent changer : un achat doit ouvrir le pont
-    // sans redémarrer le navigateur, une licence retombée en gratuit doit le fermer.
+    // Les réglages peuvent changer : le pont suit sans redémarrer le navigateur.
     chrome.storage.onChanged.addListener((changes, area) => {
       if (area !== 'local') return
-      if (!changes[BRIDGE_SETTINGS_KEY] && !changes['pixellens:license']) return
+      if (!changes[BRIDGE_SETTINGS_KEY]) return
       void sync()
     })
 

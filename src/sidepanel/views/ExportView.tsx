@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Copy, DownloadSimple, FileCode } from '@phosphor-icons/react'
 import { usePanelStore } from '../store'
 import CSSBlock from '../components/CSSBlock'
-import ProGate from '../components/ProGate'
 import { formatExport } from '@/lib/design-tokens'
 import { copyToClipboard, downloadFile } from '@/lib/export'
 import type { ExportFormat } from '@/types/design-system'
@@ -15,7 +14,6 @@ const FORMATS: { id: ExportFormat; label: string; ext: string; mime: string }[] 
 
 function ExportView() {
   const designSystem = usePanelStore((s) => s.designSystem)
-  const isPro = usePanelStore((s) => s.isPro)
   const setMode = usePanelStore((s) => s.setMode)
   const [format, setFormat] = useState<ExportFormat>('css-variables')
   const [copied, setCopied] = useState(false)
@@ -77,25 +75,18 @@ function ExportView() {
         </div>
       </div>
 
-      {/* Code preview — en gratuit, le VRAI code généré s'affiche flouté sous le
-          ProGate : on voit que c'est du vrai Tailwind, on bute au moment d'emporter. */}
+      {/* Code preview */}
       <div className="flex-1 overflow-y-auto p-3">
-        <ProGate
-          title="Emportez vos tokens"
-          body="Copiez ou téléchargez ce code en CSS Variables, Tailwind, JSON ou palette PNG."
-        >
-          <CSSBlock
-            code={output}
-            language={format === 'json' ? 'json' : format === 'tailwind' ? 'js' : 'css'}
-          />
-        </ProGate>
+        <CSSBlock
+          code={output}
+          language={format === 'json' ? 'json' : format === 'tailwind' ? 'js' : 'css'}
+        />
       </div>
 
       {/* Actions */}
       <div className="shrink-0 p-3 border-t border-panel-border flex gap-2">
         <button
           onClick={handleCopy}
-          disabled={!isPro}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-panel-accent focus-visible:ring-offset-2 focus-visible:ring-offset-panel-bg ${
             copied
               ? 'bg-success text-white'
@@ -107,7 +98,6 @@ function ExportView() {
         </button>
         <button
           onClick={handleDownload}
-          disabled={!isPro}
           aria-label="Download"
           className="px-3 py-2 rounded-lg border border-panel-border text-panel-text-dim text-[12px] font-medium hover:bg-panel-surface hover:text-panel-text transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-panel-accent focus-visible:ring-offset-2 focus-visible:ring-offset-panel-bg"
           title="Download"
